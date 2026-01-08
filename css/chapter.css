@@ -1,0 +1,173 @@
+/* =========================================
+   1. CORE VARIABLES & RESET (Code gốc của bạn)
+   ========================================= */
+:root {
+    /* MÀU CHỦ ĐẠO MỚI */
+    --primary-theme: #506891; 
+    
+    /* MÀU NỀN (DARK MODE) */
+    --bg-body: #1a1a1a;       /* Đen gần đậm */
+    --bg-element: #252525;    /* Nền cho các ô input/card/toolbar */
+    --bg-hover: #333333;      /* Màu khi di chuột vào */
+    
+    /* MÀU CHỮ */
+    --text-main: #e0e0e0;     /* Chữ chính (trắng ngà) */
+    --text-muted: #999999;    /* Chữ phụ (xám) */
+    --text-dark: #000000;     /* Dùng cho các badge nền sáng */
+
+    /* VIỀN & PHÂN CÁCH */
+    --border-color: #333333;  /* Viền tối màu */
+
+    /* BIẾN RIÊNG CHO TRANG VIEWER */
+    --viewer-width: 690px;    /* Chiều rộng chuẩn của ảnh truyện */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+body {
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    font-size: 13px;
+    overflow-y: scroll; /* Luôn hiện thanh cuộn để tránh nhảy trang */
+}
+
+a { text-decoration: none; color: inherit; transition: color 0.2s; }
+a:hover { color: var(--text-main); }
+ul { list-style: none; }
+button { cursor: pointer; border: none; background: none; color: var(--text-main); }
+
+/* --- UTILITIES --- */
+.container, .header__container, .nav__container, .main-container, .sub-nav__container, .days-nav__container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Badge & Dot */
+.badge-red {
+    background: #ff4d4d; color: white; font-size: 9px; padding: 1px 3px; border-radius: 50%; vertical-align: super;
+}
+.badge-dot {
+    display: inline-block; width: 4px; height: 4px; background: var(--primary-theme); border-radius: 50%; margin-left: 2px;
+}
+.text-green { color: var(--primary-theme); }
+
+
+/* =========================================
+   2. HEADER & NAV (Đồng bộ với trang chủ)
+   ========================================= */
+.header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 0;
+    background-color: var(--bg-body);
+}
+.header__container { display: flex; align-items: center; justify-content: space-between; }
+.header__logo { font-size: 20px; letter-spacing: -1px; color: var(--text-main); }
+
+.header__search { position: relative; width: 350px; }
+.header__search input {
+    width: 100%; padding: 8px 35px 8px 10px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    border-radius: 2px; outline: none;
+}
+.header__search input::placeholder { color: #555; }
+.header__search button { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+/* Dùng chung class btn-login cho cả nút Header */
+.btn-login, .btn-header {
+    border: 1px solid var(--border-color); padding: 5px 12px; font-size: 11px; margin-left: 5px; color: var(--text-muted); border-radius: 2px;
+}
+.btn-login:hover, .btn-header:hover { border-color: var(--text-muted); color: var(--text-main); }
+
+/* NAV CHÍNH */
+.nav, .sub-nav {
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-body);
+}
+.nav__container, .sub-nav__container { display: flex; align-items: center; height: 44px; }
+.nav__item, .nav-item {
+    font-weight: bold; margin-right: 25px; font-size: 14px; color: var(--text-main); height: 100%; display: flex; align-items: center; opacity: 0.8;
+}
+.nav__item:hover, .nav-item:hover { opacity: 1; }
+.nav__item--active, .nav-item.active {
+    background-color: var(--primary-theme); color: white; padding: 0 15px; margin-right: 15px; opacity: 1;
+}
+.nav__btn-creator, .btn-creator {
+    margin-left: auto; border: 1px solid var(--primary-theme); color: var(--primary-theme); font-weight: bold; padding: 4px 10px; border-radius: 3px; font-size: 11px;
+}
+.nav__btn-creator .badge-dot { background-color: var(--primary-theme); }
+
+/* NAV PHỤ (Thứ ngày - dùng riêng cho trang con) */
+.days-nav { border-bottom: 1px solid var(--border-color); margin-bottom: 0; background-color: var(--bg-body); }
+.days-nav__container { display: flex; height: 40px; align-items: center; }
+.days-nav a { margin-right: 20px; font-size: 12px; font-weight: normal; color: var(--text-muted); }
+.days-nav a:hover { color: var(--text-main); }
+.days-nav a.active { color: var(--primary-theme); font-weight: bold; border-bottom: 2px solid var(--primary-theme); height: 100%; display: flex; align-items: center; }
+
+
+/* =========================================
+   3. VIEWER SPECIFIC STYLES (Trang đọc truyện)
+   ========================================= */
+
+/* Thanh công cụ đọc truyện (Toolbar) */
+.viewer-toolbar {
+    background-color: var(--bg-element); /* Dùng màu #252525 đồng bộ */
+    color: var(--text-main);
+    padding: 0 20px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #000; /* Viền đậm hơn chút để tách biệt */
+    position: sticky; top: 0; z-index: 100;
+}
+
+.toolbar-left { display: flex; align-items: center; }
+.btn-back { font-size: 18px; margin-right: 15px; color: var(--text-muted); }
+.btn-back:hover { color: var(--text-main); }
+
+.chapter-title { font-size: 14px; font-weight: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.webtoon-name { font-weight: bold; }
+.divider { margin: 0 10px; color: var(--border-color); font-size: 12px; }
+
+.toolbar-right { display: flex; align-items: center; font-size: 13px; }
+.btn-toolbar { display: flex; align-items: center; color: var(--text-main); font-weight: bold; transition: opacity 0.2s; }
+.btn-toolbar i { margin-right: 6px; font-size: 14px; }
+.btn-toolbar:hover { opacity: 0.8; }
+
+/* Nút Interest dùng màu chủ đạo */
+.btn-interest i { color: var(--primary-theme); font-size: 16px; }
+
+/* Nút điều hướng disabled */
+.btn-toolbar.disabled { color: var(--border-color); pointer-events: none; font-weight: normal; }
+
+/* NỘI DUNG TRUYỆN */
+.viewer-container {
+    max-width: var(--viewer-width);
+    margin: 0 auto;
+    background-color: var(--bg-body);
+    min-height: 100vh;
+}
+
+/* Cảnh báo độ tuổi */
+.viewer-warning { text-align: center; padding: 100px 20px; color: var(--text-muted); font-size: 18px; }
+.age-limit {
+    display: inline-block; width: 36px; height: 36px;
+    border: 2px solid var(--text-muted); border-radius: 50%;
+    text-align: center; line-height: 32px; font-weight: bold; margin-right: 8px;
+}
+.viewer-warning p { font-size: 12px; margin-top: 10px; opacity: 0.7; }
+
+/* Dải ảnh */
+.comic-strip { width: 100%; }
+.comic-strip img { display: block; width: 100%; height: auto; }
+
+/* Footer của Viewer */
+.viewer-footer { padding: 50px 0; text-align: center; color: var(--text-muted); font-size: 14px; }
