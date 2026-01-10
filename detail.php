@@ -1,5 +1,6 @@
 <?php
 require_once 'includes/db.php';
+require_once 'includes/functions.php'; // Gọi file này để dùng getImageUrl
 
 // 1. Lấy ID
 $id = $_GET['id'] ?? null;
@@ -8,17 +9,14 @@ if (!$id) die("Không tìm thấy truyện.");
 // --- [LOGIC MỚI] KIỂM TRA SESSION ĐỂ TRÁNH SPAM VIEW ---
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-// Khởi tạo mảng lưu các ID truyện đã xem nếu chưa có
 if (!isset($_SESSION['viewed_articles'])) {
     $_SESSION['viewed_articles'] = [];
 }
 
-// Nếu ID truyện này CHƯA có trong session -> Tăng view và lưu lại
 if (!in_array($id, $_SESSION['viewed_articles'])) {
     $pdo->prepare("UPDATE articles SET ViewCount = ViewCount + 1 WHERE ArticleID = ?")->execute([$id]);
-    $_SESSION['viewed_articles'][] = $id; // Đánh dấu là đã xem
+    $_SESSION['viewed_articles'][] = $id; 
 }
-// -------------------------------------------------------
 
 // 2. Lấy thông tin
 $sql = "SELECT a.*, GROUP_CONCAT(DISTINCT auth.Name SEPARATOR ', ') as Authors, GROUP_CONCAT(DISTINCT g.Name SEPARATOR ', ') as Genres 
@@ -67,20 +65,23 @@ require_once 'includes/header.php';
     
     .btn-action {
         display: inline-block; padding: 10px 25px; border-radius: 4px; font-weight: bold; margin-right: 10px; cursor: pointer; text-align: center;
-        transition: 0.2s;
+        transition: 0.2s; border: none; font-size: 14px;
     }
-    .btn-read { background: var(--primary-theme); color: #fff; }
+    .btn-read { background: var(--primary-theme); color: #fff; text-decoration: none; }
     .btn-read:hover { opacity: 0.9; color: #fff; }
     
     .btn-follow { background: transparent; border: 1px solid var(--primary-theme); color: var(--primary-theme); }
     .btn-follow:hover { background: var(--primary-theme); color: #fff; }
+    
+    /* Trạng thái Active (Đã theo dõi) */
     .btn-follow.active { background: #444; border-color: #444; color: #aaa; }
+    .btn-follow.active:hover { background: #d63031; border-color: #d63031; color: #fff; } /* Hover vào thì hiện màu đỏ báo hiệu hủy */
 
     /* Chapter List Style */
     .chapter-list-header { border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px; font-weight: bold; font-size: 16px; }
     .chapter-item { 
         display: flex; justify-content: space-between; padding: 12px 10px; 
-        border-bottom: 1px solid var(--border-color); transition: 0.2s;
+        border-bottom: 1px solid var(--border-color); transition: 0.2s; text-decoration: none;
     }
     .chapter-item:hover { background-color: var(--bg-hover); }
     .chap-name { color: var(--text-main); font-weight: bold; }
@@ -120,15 +121,13 @@ require_once 'includes/header.php';
                     </a>
                 <?php endif; ?>
 
-                <?php if ($isBookmarked): ?>
-                    <a href="includes/action_bookmark.php?id=<?= $article['ArticleID'] ?>" class="btn-action btn-follow active">
-                        <i class="fas fa-check"></i> Đã theo dõi
-                    </a>
-                <?php else: ?>
-                    <a href="includes/action_bookmark.php?id=<?= $article['ArticleID'] ?>" class="btn-action btn-follow">
-                        <i class="fas fa-heart"></i> Theo dõi
-                    </a>
-                <?php endif; ?>
+                <button id="btn-follow-detail" class="btn-action btn-follow <?= $isBookmarked ? 'active' : '' ?>" data-id="<?= $article['ArticleID'] ?>">
+                    <?php if ($isBookmarked): ?>
+                        <i class="fas fa-check"></i> <span>Đã theo dõi</span>
+                    <?php else: ?>
+                        <i class="fas fa-heart"></i> <span>Theo dõi</span>
+                    <?php endif; ?>
+                </button>
             </div>
         </div>
     </div>
@@ -156,5 +155,40 @@ require_once 'includes/header.php';
 <aside class="sidebar">
     <?php include 'includes/right_sidebar.php'; ?>
 </aside>
+
+<script>
+document.getElementById('btn-follow-detail').addEventListener('click', function() {
+    const btn = this;
+    const articleId = btn.getAttribute('data-id');
+    const icon = btn.querySelector('i');
+    const text = btn.querySelector('span');
+
+    // Gọi API (Backend)
+    fetch('includes/action_bookmark.php?ajax=1&id=' + articleId)
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            if (data.is_bookmarked) {
+                // Đã theo dõi -> Đổi sang style Active
+                btn.classList.add('active');
+                icon.className = 'fas fa-check';
+                text.innerText = 'Đã theo dõi';
+            } else {
+                // Hủy theo dõi -> Đổi về style thường
+                btn.classList.remove('active');
+                icon.className = 'fas fa-heart';
+                text.innerText = 'Theo dõi';
+            }
+        } else if (data.status === 'login_required') {
+            if(confirm("Bạn cần đăng nhập để theo dõi truyện. Đăng nhập ngay?")) {
+                window.location.href = 'login.php';
+            }
+        } else {
+            alert(data.message || 'Có lỗi xảy ra');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+</script>
 
 <?php require_once 'includes/footer.php'; ?>
