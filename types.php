@@ -1,13 +1,20 @@
 <?php
 require_once 'includes/db.php';
-require_once 'includes/functions.php'; // Để dùng getImageUrl
+require_once 'includes/functions.php';
+
+// --- CẤU HÌNH PHÂN TRANG ---
+$limit = 12; // Số truyện mỗi trang
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+$offset = ($page - 1) * $limit;
 
 // 1. Lấy danh sách Categories
 $allCats = $pdo->query("SELECT * FROM categories ORDER BY Name ASC")->fetchAll();
 
-// 2. Xử lý Lọc
+// 2. Xử lý Lọc & Đếm tổng
 $currentCatId = $_GET['cat_id'] ?? 0;
 $pageTitle = "Phân loại truyện";
+$baseUrl = "types.php?cat_id=$currentCatId"; // URL cơ sở để tạo link phân trang
 
 if ($currentCatId > 0) {
     foreach($allCats as $c) {
@@ -16,23 +23,32 @@ if ($currentCatId > 0) {
             break;
         }
     }
-    $stmt = $pdo->prepare("SELECT * FROM articles WHERE CategoryID = ? AND IsDeleted = 0 ORDER BY UpdatedAt DESC");
+    // Đếm tổng
+    $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM articles WHERE CategoryID = ? AND IsDeleted = 0");
+    $stmtCount->execute([$currentCatId]);
+    $totalArticles = $stmtCount->fetchColumn();
+
+    // Lấy dữ liệu (Thêm LIMIT OFFSET)
+    $stmt = $pdo->prepare("SELECT * FROM articles WHERE CategoryID = ? AND IsDeleted = 0 ORDER BY UpdatedAt DESC LIMIT $limit OFFSET $offset");
     $stmt->execute([$currentCatId]);
 } else {
     $pageTitle = "Tất cả phân loại";
-    $stmt = $pdo->query("SELECT * FROM articles WHERE IsDeleted = 0 ORDER BY UpdatedAt DESC");
+    // Đếm tổng
+    $totalArticles = $pdo->query("SELECT COUNT(*) FROM articles WHERE IsDeleted = 0")->fetchColumn();
+    
+    // Lấy dữ liệu
+    $stmt = $pdo->query("SELECT * FROM articles WHERE IsDeleted = 0 ORDER BY UpdatedAt DESC LIMIT $limit OFFSET $offset");
 }
 
 $articles = $stmt->fetchAll();
+$totalPages = ceil($totalArticles / $limit);
 
 // --- [LOGIC AJAX] ---
-// Nếu có tham số ajax=1, chỉ in ra nội dung thẻ <section> rồi dừng
 if (isset($_GET['ajax'])) {
-    renderContent($pageTitle, $articles); // Gọi hàm hiển thị bên dưới
-    exit; // Dừng ngay, không load header/footer
+    renderContent($pageTitle, $articles, $page, $totalPages, $baseUrl);
+    exit;
 }
 
-// Nếu không phải AJAX, load giao diện đầy đủ
 require_once 'includes/header.php';
 ?>
 
@@ -50,7 +66,18 @@ require_once 'includes/header.php';
     .nav-type-item:hover { color: var(--text-main); }
     .nav-type-item.active { color: var(--primary-theme); border-bottom-color: var(--primary-theme); }
     
-    /* Loading Effect */
+    /* CSS Phân trang */
+    .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
+    .page-link {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 35px; height: 35px; padding: 0 10px;
+        border: 1px solid var(--border-color); border-radius: 4px;
+        color: var(--text-muted); text-decoration: none; font-size: 13px;
+        transition: 0.2s; background: var(--bg-element);
+    }
+    .page-link:hover { border-color: var(--text-main); color: var(--text-main); }
+    .page-link.active { background: var(--primary-theme); color: #fff; border-color: var(--primary-theme); font-weight: bold; }
+    
     .loading-overlay { opacity: 0.5; pointer-events: none; transition: 0.2s; }
 </style>
 
@@ -58,20 +85,20 @@ require_once 'includes/header.php';
     <main class="content">
         
         <div class="type-nav">
-            <a href="types.php" class="nav-type-item ajax-tab <?= $currentCatId == 0 ? 'active' : '' ?>" data-id="0">
+            <a href="types.php" class="nav-type-item ajax-trigger <?= $currentCatId == 0 ? 'active' : '' ?>" data-url="types.php?cat_id=0">
                 Tất cả
             </a>
             <?php foreach($allCats as $c): ?>
                 <a href="types.php?cat_id=<?= $c['CategoryID'] ?>" 
-                   class="nav-type-item ajax-tab <?= $currentCatId == $c['CategoryID'] ? 'active' : '' ?>" 
-                   data-id="<?= $c['CategoryID'] ?>">
+                   class="nav-type-item ajax-trigger <?= $currentCatId == $c['CategoryID'] ? 'active' : '' ?>" 
+                   data-url="types.php?cat_id=<?= $c['CategoryID'] ?>">
                     <?= htmlspecialchars($c['Name']) ?>
                 </a>
             <?php endforeach; ?>
         </div>
 
         <div id="ajax-content">
-            <?php renderContent($pageTitle, $articles); ?>
+            <?php renderContent($pageTitle, $articles, $page, $totalPages, $baseUrl); ?>
         </div>
 
     </main>
@@ -83,38 +110,45 @@ require_once 'includes/header.php';
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const tabs = document.querySelectorAll('.ajax-tab');
     const contentArea = document.getElementById('ajax-content');
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', function(e) {
-            e.preventDefault(); // Chặn load trang
-
-            // 1. Xử lý giao diện Tab Active
-            tabs.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-
-            // 2. Hiệu ứng loading
-            contentArea.classList.add('loading-overlay');
-
-            // 3. Lấy URL cần gọi
-            const url = this.getAttribute('href');
+    // Sử dụng Event Delegation để bắt sự kiện cho cả Tab và Pagination (vì Pagination sinh ra sau)
+    document.body.addEventListener('click', function(e) {
+        // 1. Kiểm tra nếu click vào Tab hoặc Link phân trang
+        const target = e.target.closest('.ajax-trigger') || e.target.closest('.page-link');
+        
+        if (target && !target.classList.contains('active')) {
+            e.preventDefault();
             
-            // 4. Cập nhật URL trên thanh địa chỉ (để F5 vẫn đúng trang)
+            // Nếu là Tab thì cập nhật UI active
+            if (target.classList.contains('nav-type-item')) {
+                document.querySelectorAll('.nav-type-item').forEach(t => t.classList.remove('active'));
+                target.classList.add('active');
+            }
+
+            const url = target.getAttribute('href') || target.dataset.url;
+            if (!url) return;
+
+            // Loading effect
+            contentArea.classList.add('loading-overlay');
+            
+            // Update URL browser
             window.history.pushState(null, '', url);
 
-            // 5. Gọi AJAX
+            // Fetch AJAX
             fetch(url + (url.includes('?') ? '&' : '?') + 'ajax=1')
-                .then(response => response.text())
+                .then(res => res.text())
                 .then(html => {
-                    contentArea.innerHTML = html; // Đắp HTML mới vào
-                    contentArea.classList.remove('loading-overlay'); // Tắt loading
+                    contentArea.innerHTML = html;
+                    contentArea.classList.remove('loading-overlay');
+                    // Scroll nhẹ lên đầu list nếu đang ở dưới
+                    window.scrollTo({ top: 100, behavior: 'smooth' });
                 })
                 .catch(err => {
-                    console.error('Lỗi:', err);
+                    console.error(err);
                     contentArea.classList.remove('loading-overlay');
                 });
-        });
+        }
     });
 });
 </script>
@@ -122,14 +156,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <?php require_once 'includes/footer.php'; ?>
 
 <?php
-// --- HÀM RENDER NỘI DUNG (Dùng chung cho cả Load thường và AJAX) ---
-function renderContent($title, $list) {
+// --- HÀM RENDER (Thêm tham số Page & TotalPages) ---
+function renderContent($title, $list, $page, $totalPages, $baseUrl) {
 ?>
     <section class="section">
         <div class="section__header">
             <h3><?= htmlspecialchars($title) ?></h3>
             <span style="font-size: 12px; color: var(--text-muted); margin-left: auto;">
-                <?= count($list) ?> kết quả
+                Trang <?= $page ?> / <?= $totalPages > 0 ? $totalPages : 1 ?>
             </span>
         </div>
 
@@ -151,6 +185,29 @@ function renderContent($title, $list) {
                 </article>
                 <?php endforeach; ?>
             </div>
+
+            <?php if ($totalPages > 1): ?>
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <a href="<?= $baseUrl ?>&page=<?= $page - 1 ?>" class="page-link"><i class="fas fa-chevron-left"></i></a>
+                <?php endif; ?>
+
+                <?php 
+                $start = max(1, $page - 2);
+                $end = min($totalPages, $page + 2);
+                for ($i = $start; $i <= $end; $i++): 
+                ?>
+                    <a href="<?= $baseUrl ?>&page=<?= $i ?>" class="page-link <?= $i == $page ? 'active' : '' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+
+                <?php if ($page < $totalPages): ?>
+                    <a href="<?= $baseUrl ?>&page=<?= $page + 1 ?>" class="page-link"><i class="fas fa-chevron-right"></i></a>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
         <?php else: ?>
             <div style="text-align: center; padding: 50px; color: var(--text-muted);">
                 <i class="far fa-folder-open" style="font-size: 40px; margin-bottom: 15px;"></i>

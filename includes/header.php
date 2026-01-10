@@ -252,7 +252,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <?php if (isset($_SESSION['user_id'])): ?>
                 <a href="<?= BASE_URL ?>profile.php" 
                    class="nav__btn-creator <?= ($current_page == 'profile.php') ? 'nav__item--active' : '' ?>" 
-                   style="text-decoration:none;">
+                   style="text-decoration:none;color:white;">
                     My Page <span class="badge-dot"></span>
                 </a>
             <?php endif; ?>
