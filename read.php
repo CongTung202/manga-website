@@ -1,26 +1,23 @@
 <?php
 require_once 'includes/db.php';
-require_once 'includes/functions.php'; // Gọi file này để dùng getImageUrl nếu cần
+require_once 'includes/functions.php'; // Gọi hàm để dùng getImageUrl
 
 $articleId = $_GET['id'] ?? null;
 $chapterId = $_GET['chap'] ?? null;
 if (!$chapterId) die("Lỗi: Không tìm thấy chapter.");
 
-// 1. Tăng View (Có kiểm tra Session)
+// 1. Tăng View
 if (session_status() === PHP_SESSION_NONE) session_start();
-
-if (!isset($_SESSION['viewed_chapters'])) {
-    $_SESSION['viewed_chapters'] = [];
-}
-
+if (!isset($_SESSION['viewed_chapters'])) $_SESSION['viewed_chapters'] = [];
 if (!in_array($chapterId, $_SESSION['viewed_chapters'])) {
     $pdo->prepare("UPDATE chapters SET ViewCount = ViewCount + 1 WHERE ChapterID = ?")->execute([$chapterId]);
     $_SESSION['viewed_chapters'][] = $chapterId; 
 }
 
 // 2. Lấy thông tin Chapter & Truyện
+// [QUAN TRỌNG] Thêm a.CoverImage vào SELECT để lấy ảnh bìa lưu vào lịch sử
 $stmt = $pdo->prepare("
-    SELECT c.*, a.Title as ArticleTitle 
+    SELECT c.*, a.Title as ArticleTitle, a.CoverImage 
     FROM chapters c 
     JOIN articles a ON c.ArticleID = a.ArticleID 
     WHERE c.ChapterID = ?
@@ -30,7 +27,36 @@ $chapter = $stmt->fetch();
 
 if (!$chapter) die("Chapter không tồn tại.");
 
-// 3. Lấy ảnh
+// --- [CODE MỚI] LƯU LỊCH SỬ ĐỌC VÀO COOKIE ---
+$cookieName = 'manga_history';
+$history = isset($_COOKIE[$cookieName]) ? json_decode($_COOKIE[$cookieName], true) : [];
+
+// Tạo mảng dữ liệu cho chương hiện tại
+$newItem = [
+    'id' => $articleId,
+    'title' => $chapter['ArticleTitle'],
+    'image' => $chapter['CoverImage'], // Lưu đường dẫn ảnh
+    'chap_id' => $chapterId,
+    'chap_index' => $chapter['Index'],
+    'time' => time()
+];
+
+// 1. Xóa truyện này nếu đã có trong lịch sử (để đưa lên đầu)
+$history = array_filter($history, function($item) use ($articleId) {
+    return $item['id'] != $articleId;
+});
+
+// 2. Thêm vào đầu mảng
+array_unshift($history, $newItem);
+
+// 3. Giới hạn chỉ lưu 5 truyện gần nhất
+$history = array_slice($history, 0, 5);
+
+// 4. Lưu Cookie (Quan trọng: set path là "/" để nhận trên toàn domain)
+setcookie($cookieName, json_encode($history), time() + (86400 * 30), "/");
+// ---------------------------------------------
+
+// 3. Lấy ảnh nội dung
 $stmtImg = $pdo->prepare("SELECT * FROM chapter_images WHERE ChapterID = ? ORDER BY SortOrder ASC");
 $stmtImg->execute([$chapterId]);
 $images = $stmtImg->fetchAll();
@@ -44,7 +70,7 @@ $stmtNext = $pdo->prepare("SELECT ChapterID FROM chapters WHERE ArticleID = ? AN
 $stmtNext->execute([$articleId, $chapter['Index']]);
 $nextChap = $stmtNext->fetch();
 
-// 5. Kiểm tra Bookmark (Để hiển thị trạng thái ban đầu của nút)
+// 5. Kiểm tra Bookmark
 $isBookmarked = false;
 if (isset($_SESSION['user_id'])) {
     $stmtCheck = $pdo->prepare("SELECT BookmarkID FROM bookmarks WHERE UserID = ? AND ArticleID = ?");
