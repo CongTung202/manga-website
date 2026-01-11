@@ -94,14 +94,14 @@ require_once 'includes/header.php';
             </div>
 
             <div class="genre-nav">
-                <a href="genres.php?genre_id=0" class="btn-genre ajax-genre <?= $currentGenreId == 0 ? 'active' : '' ?>" data-url="genres.php?genre_id=0">
+                <a href="<?= BASE_URL ?>the-loai/0" class="btn-genre ajax-genre <?= $currentGenreId == 0 ? 'active' : '' ?>" data-url="<?= BASE_URL ?>genres?genre_id=0">
                     Tất cả
                 </a>
                 
                 <?php foreach($allGenres as $g): ?>
-                    <a href="genres.php?genre_id=<?= $g['GenreID'] ?>" 
+                    <a href="<?= BASE_URL ?>the-loai/<?= $g['GenreID'] ?>" 
                        class="btn-genre ajax-genre <?= $currentGenreId == $g['GenreID'] ? 'active' : '' ?>"
-                       data-url="genres.php?genre_id=<?= $g['GenreID'] ?>">
+                       data-url="<?= BASE_URL ?>genres?genre_id=<?= $g['GenreID'] ?>">
                         <?= htmlspecialchars($g['Name']) ?>
                     </a>
                 <?php endforeach; ?>
@@ -170,7 +170,7 @@ function renderGenreContent($title, $list, $page, $totalPages, $baseUrl) {
     <?php if (count($list) > 0): ?>
         <div class="card-list">
             <?php foreach($list as $art): ?>
-            <article class="card" onclick="window.location.href='detail.php?id=<?= $art['ArticleID'] ?>'">
+            <article class="card" onclick="window.location.href='<?= BASE_URL ?>truyen/<?= $art['ArticleID'] ?>'">
                 <div class="card__thumb">
                     <?php if($art['CoverImage']): ?>
                         <img src="<?= getImageUrl($art['CoverImage']) ?>" alt="<?= htmlspecialchars($art['Title']) ?>">
@@ -212,7 +212,7 @@ function renderGenreContent($title, $list, $page, $totalPages, $baseUrl) {
         <div style="text-align: center; padding: 50px; color: var(--text-muted);">
             <i class="far fa-sad-tear" style="font-size: 40px; margin-bottom: 15px;"></i>
             <p>Chưa có truyện nào thuộc thể loại này.</p>
-            <a href="genres.php" style="color: var(--primary-theme); font-weight: bold;">Xem tất cả thể loại</a>
+            <a href="<?= BASE_URL ?>genres" style="color: var(--primary-theme); font-weight: bold;">Xem tất cả thể loại</a>
         </div>
     <?php endif; ?>
 <?php

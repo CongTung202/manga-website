@@ -66,8 +66,6 @@ $stmt->execute($params);
 $comments = $stmt->fetchAll();
 ?>
 <style>
-    /* ... (Các CSS cũ giữ nguyên) ... */
-
     /* --- GIAO DIỆN PHÂN TRANG DARK MODE --- */
     .pagination {
         margin-top: 20px;

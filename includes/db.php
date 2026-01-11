@@ -1,9 +1,13 @@
 <?php
+// GỌI FILE CẤU HÌNH CHÍNH (config.php)
+require_once __DIR__ . '/config.php';
+
 // BẮT BUỘC: Khởi động session đầu tiên
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// CẤU HÌNH CƠ SỞ DỮ LIỆU
 $host = 'localhost';
 $db   = 'mangawebsite';
 $user = 'root';
@@ -22,7 +26,4 @@ try {
 } catch (\PDOException $e) {
     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 }
-
-if (!defined('BASE_URL')) define('BASE_URL', '/manga-website/');
-if (!defined('ROOT_PATH')) define('ROOT_PATH', dirname(__DIR__)); 
 ?>

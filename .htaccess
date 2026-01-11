@@ -1,0 +1,63 @@
+# ========================================
+# MANGA WEBSITE - MOD_REWRITE & SECURITY
+# ========================================
+
+RewriteEngine On
+
+# ========================================
+# 1. CHẶN TRUY CẬP TRỰC TIẾP
+# ========================================
+# Chặn truy cập vào thư mục includes (chứa các file cấu hình)
+RewriteRule ^includes/ - [F,L]
+
+# Cho phép tải file từ thư mục uploads (ảnh, video)
+RewriteRule ^uploads/ - [L]
+
+# ========================================
+# 2. XÓA ĐU ÔILE .PHP
+# ========================================
+# Cho phép truy cập vào các folder và file thật
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+# Ví dụ: domain.com/login -> domain.com/login.php
+RewriteRule ^([a-z0-9-]+)/?$ $1.php [L]
+
+# ========================================
+# 3. REWRITE LINK VỚI PARAMETERS
+# ========================================
+
+# Trang chi tiết truyện
+# Định dạng: /truyen/{ArticleID}
+# Ví dụ: domain.com/truyen/1 -> detail.php?id=1
+RewriteRule ^truyen/([0-9]+)/?$ detail.php?id=$1 [L,QSA]
+
+# Trang đọc truyện (Chương)
+# Định dạng: /doc/{ArticleID}/{ChapterNumber}
+# Ví dụ: domain.com/doc/1/5 -> read.php?id=1&chap=5
+RewriteRule ^doc/([0-9]+)/([0-9]+)/?$ read.php?id=$1&chap=$2 [L,QSA]
+
+# Trang danh sách truyện theo thể loại
+# Định dạng: /the-loai/{GenreID}
+# Ví dụ: domain.com/the-loai/1 -> genres.php?genre_id=1
+RewriteRule ^the-loai/([0-9]+)/?$ genres.php?genre_id=$1 [L,QSA]
+
+# ========================================
+# 4. COMPRESSION & PERFORMANCE
+# ========================================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
+
+# ========================================
+# 5. CACHING
+# ========================================
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access 1 month"
+  ExpiresByType text/javascript "access 1 month"
+  ExpiresByType application/javascript "access 1 month"
+  ExpiresByType image/jpeg "access 1 year"
+  ExpiresByType image/gif "access 1 year"
+  ExpiresByType image/png "access 1 year"
+  ExpiresByType image/webp "access 1 year"
+</IfModule>

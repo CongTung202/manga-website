@@ -116,7 +116,7 @@ require_once 'includes/header.php';
 
             <div style="margin-top: 25px;">
                 <?php if(count($chapters) > 0): $firstChap = end($chapters); ?>
-                    <a href="read.php?id=<?= $article['ArticleID'] ?>&chap=<?= $firstChap['ChapterID'] ?>" class="btn-action btn-read">
+                    <a href="<?= BASE_URL ?>doc/<?= $article['ArticleID'] ?>/<?= $firstChap['ChapterID'] ?>" class="btn-action btn-read">
                         <i class="fas fa-book-open"></i> Đọc ngay
                     </a>
                 <?php endif; ?>
@@ -137,7 +137,7 @@ require_once 'includes/header.php';
         <div style="max-height: 500px; overflow-y: auto; padding-right: 5px;">
             <?php if(count($chapters) > 0): ?>
                 <?php foreach($chapters as $chap): ?>
-                    <a href="read.php?id=<?= $article['ArticleID'] ?>&chap=<?= $chap['ChapterID'] ?>" class="chapter-item">
+                    <a href="<?= BASE_URL ?>doc/<?= $id ?>/<?= $chap['ChapterID'] ?>" class="chapter-item">
                         <span class="chap-name">Chapter <?= $chap['Index'] ?> <?= $chap['Title'] ? '- '.htmlspecialchars($chap['Title']) : '' ?></span>
                         <span class="chap-date"><?= date('d/m/Y', strtotime($chap['CreatedAt'])) ?></span>
                     </a>

@@ -85,13 +85,13 @@ require_once 'includes/header.php';
     <main class="content">
         
         <div class="type-nav">
-            <a href="types.php" class="nav-type-item ajax-trigger <?= $currentCatId == 0 ? 'active' : '' ?>" data-url="types.php?cat_id=0">
+            <a href="<?= BASE_URL ?>types" class="nav-type-item ajax-trigger <?= $currentCatId == 0 ? 'active' : '' ?>" data-url="<?= BASE_URL ?>types?cat_id=0">
                 Tất cả
             </a>
             <?php foreach($allCats as $c): ?>
-                <a href="types.php?cat_id=<?= $c['CategoryID'] ?>" 
+                <a href="<?= BASE_URL ?>types?cat_id=<?= $c['CategoryID'] ?>" 
                    class="nav-type-item ajax-trigger <?= $currentCatId == $c['CategoryID'] ? 'active' : '' ?>" 
-                   data-url="types.php?cat_id=<?= $c['CategoryID'] ?>">
+                   data-url="<?= BASE_URL ?>types?cat_id=<?= $c['CategoryID'] ?>">
                     <?= htmlspecialchars($c['Name']) ?>
                 </a>
             <?php endforeach; ?>
@@ -170,7 +170,7 @@ function renderContent($title, $list, $page, $totalPages, $baseUrl) {
         <?php if (count($list) > 0): ?>
             <div class="card-list">
                 <?php foreach($list as $art): ?>
-                <article class="card" onclick="window.location.href='detail.php?id=<?= $art['ArticleID'] ?>'">
+                <article class="card" onclick="window.location.href='<?= BASE_URL ?>truyen/<?= $art['ArticleID'] ?>'">
                     <div class="card__thumb">
                         <?php if($art['CoverImage']): ?>
                             <img src="<?= getImageUrl($art['CoverImage']) ?>" alt="<?= htmlspecialchars($art['Title']) ?>">

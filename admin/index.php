@@ -73,7 +73,7 @@ $recentComments = $pdo->query("
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center py-3">
                     <h6 class="m-0 fw-bold"><i class="fas fa-comments me-2 text-warning"></i>Bình luận mới nhất</h6>
-                    <a href="modules/comments/index.php" class="btn btn-sm btn-light py-0" style="font-size:11px;">Xem tất cả</a>
+                    <a href="<?= ADMIN_MODULES_URL ?>comments/" class="btn btn-sm btn-light py-0" style="font-size:11px;">Xem tất cả</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -116,7 +116,7 @@ $recentComments = $pdo->query("
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center py-3">
                     <h6 class="m-0 fw-bold"><i class="fas fa-user-plus me-2 text-success"></i>Thành viên mới</h6>
-                    <a href="modules/users/index.php" class="btn btn-sm btn-light py-0" style="font-size:11px;">Quản lý</a>
+                    <a href="<?= ADMIN_MODULES_URL ?>users/" class="btn btn-sm btn-light py-0" style="font-size:11px;">Quản lý</a>
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush bg-transparent">

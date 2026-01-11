@@ -115,7 +115,7 @@ require_once 'includes/header.php';
             <div class="history-list">
                 <?php foreach($historyData as $item): ?>
                     <div class="history-item">
-                        <a href="read.php?id=<?= $item['id'] ?>&chap=<?= $item['chap_id'] ?>" class="h-thumb">
+                        <a href="<?= BASE_URL ?>doc/<?= $item['id'] ?>/<?= $item['chap_id'] ?>" class="h-thumb">
                             <?php if(!empty($item['image'])): ?>
                                 <img src="<?= getImageUrl($item['image']) ?>" alt="<?= htmlspecialchars($item['title']) ?>">
                             <?php else: ?>
@@ -124,7 +124,7 @@ require_once 'includes/header.php';
                         </a>
                         
                         <div class="h-info">
-                            <a href="read.php?id=<?= $item['id'] ?>&chap=<?= $item['chap_id'] ?>" class="h-title">
+                            <a href="<?= BASE_URL ?>doc/<?= $item['id'] ?>/<?= $item['chap_id'] ?>" class="h-title">
                                 <?= htmlspecialchars($item['title']) ?>
                             </a>
                             
@@ -144,8 +144,8 @@ require_once 'includes/header.php';
                             </div>
 
                             <div class="h-actions">
-                                <a href="read.php?id=<?= $item['id'] ?>&chap=<?= $item['chap_id'] ?>">Đọc tiếp</a>
-                                <a href="detail.php?id=<?= $item['id'] ?>">Chi tiết</a>
+                                <a href="<?= BASE_URL ?>doc/<?= $item['id'] ?>/<?= $item['chap_id'] ?>">Đọc tiếp</a>
+                                <a href="<?= BASE_URL ?>truyen/<?= $item['id'] ?>">Chi tiết</a>
                             </div>
                         </div>
                     </div>
@@ -155,7 +155,7 @@ require_once 'includes/header.php';
             <div class="text-center py-5">
                 <i class="fas fa-history text-muted mb-3" style="font-size: 50px;"></i>
                 <p class="text-muted">Bạn chưa đọc truyện nào.</p>
-                <a href="index.php" class="btn-action btn-read" style="padding: 8px 20px;">Về trang chủ</a>
+                <a href="<?= BASE_URL ?>" class="btn-action btn-read" style="padding: 8px 20px;">Về trang chủ</a>
             </div>
         <?php endif; ?>
 

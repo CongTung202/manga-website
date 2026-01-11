@@ -77,7 +77,7 @@ if (!function_exists('getAvatarLink')) {
     <?php else: ?>
         <div style="background-color: var(--bg-body); padding: 20px; text-align: center; border-radius: 4px; border: 1px solid var(--border-color); margin-bottom: 30px;">
             <span style="color: var(--text-muted);">Vui lòng</span> 
-            <a href="login.php" style="color: var(--primary-theme); font-weight: bold;">Đăng nhập</a> 
+            <a href="<?= BASE_URL ?>login" style="color: var(--primary-theme); font-weight: bold;">Đăng nhập</a> 
             <span style="color: var(--text-muted);">để tham gia bình luận.</span>
         </div>
     <?php endif; ?>
@@ -130,7 +130,7 @@ if (!function_exists('getAvatarLink')) {
                                 <?php if($cmt['Role'] == 1): ?><span class="badge-admin">ADMIN</span><?php endif; ?>
                                 
                                 <?php if (!$filterChapterId && !empty($cmt['ChapterIndex'])): ?>
-                                    <span class="badge-chap" onclick="window.location.href='read.php?id=<?= $id ?>&chap=<?= $cmt['ChapterID'] ?>#comments'" style="cursor:pointer;">
+                                    <span class="badge-chap" onclick="window.location.href='<?= BASE_URL ?>doc/<?= $id ?>/<?= $cmt['ChapterID'] ?>#comments'" style="cursor:pointer;">
                                         Chap <?= $cmt['ChapterIndex'] ?>
                                     </span>
                                 <?php endif; ?>

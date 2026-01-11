@@ -102,7 +102,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
         <div class="aside-list mb-4">
             <?php foreach($historyData as $item): ?>
-            <div class="aside-list-item mb-3" onclick="window.location.href='read.php?id=<?= $item['id'] ?>&chap=<?= $item['chap_id'] ?>'">
+            <div class="aside-list-item mb-3" onclick="window.location.href='<?= BASE_URL ?>doc/<?= $item['id'] ?>/<?= $item['chap_id'] ?>'">
                 <div class="aside-thumb">
                     <?php if($item['image']): ?>
                         <img src="<?= getImageUrl($item['image']) ?>">
@@ -135,7 +135,7 @@ if (isset($_SESSION['user_id'])) {
     
     <div class="aside-list">
         <?php $rank = 1; foreach($topArticles as $art): ?>
-        <div class="aside-list-item" onclick="window.location.href='detail.php?id=<?= $art['ArticleID'] ?>'">
+        <div class="aside-list-item" onclick="window.location.href='<?= BASE_URL ?>truyen/<?= $art['ArticleID'] ?>'">
             <div class="aside-thumb">
                 <?php if($art['CoverImage']): ?>
                     <img src="<?= getImageUrl($art['CoverImage']) ?>">

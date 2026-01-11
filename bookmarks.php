@@ -33,15 +33,15 @@ require_once 'includes/header.php';
             <?php if (count($savedMangas) > 0): ?>
                 <div class="card-list">
                     <?php foreach($savedMangas as $art): ?>
-                    <article class="card" onclick="window.location.href='detail.php?id=<?= $art['ArticleID'] ?>'">
+                    <article class="card" onclick="window.location.href='<?= BASE_URL ?>truyen/<?= $art['ArticleID'] ?>'">
                         <div class="card__thumb">
                             <?php if($art['CoverImage']): ?>
-                                <img src="<?= BASE_URL . $art['CoverImage'] ?>" alt="Thumb">
+                                <img src="<?= getImageUrl($art['CoverImage']) ?>" alt="Thumb">
                             <?php else: ?>
                                 <div style="width:100%; height:100%; background:#333; display:flex; align-items:center; justify-content:center; color:#777; font-size:10px;">NO IMG</div>
                             <?php endif; ?>
                             
-                            <a href="includes/action_bookmark.php?id=<?= $art['ArticleID'] ?>" 
+                            <a href="<?= BASE_URL ?>includes/action_bookmark.php?id=<?= $art['ArticleID'] ?>" 
                                onclick="event.stopPropagation(); return confirm('Bạn muốn bỏ theo dõi truyện này?')"
                                style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.6); color:#fff; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:0.2s; border:1px solid rgba(255,255,255,0.3);"
                                onmouseover="this.style.backgroundColor='#ff4d4d'; this.style.borderColor='#ff4d4d';"
@@ -60,7 +60,7 @@ require_once 'includes/header.php';
                 <div style="text-align: center; padding: 60px 20px; color: var(--text-muted); background: var(--bg-element); border-radius: 8px; border: 1px solid var(--border-color);">
                     <i class="far fa-folder-open" style="font-size: 40px; margin-bottom: 15px; opacity: 0.5;"></i>
                     <p class="mb-3">Bạn chưa theo dõi truyện nào.</p>
-                    <a href="index.php" style="color: var(--primary-theme); font-weight: bold; text-decoration: none;">
+                    <a href="<?= BASE_URL ?>" style="color: var(--primary-theme); font-weight: bold; text-decoration: none;">
                         <i class="fas fa-search me-1"></i> Khám phá truyện ngay
                     </a>
                 </div>

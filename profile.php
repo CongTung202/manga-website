@@ -212,7 +212,7 @@ require_once 'includes/header.php';
                             <div style="flex: 1; padding-right: 15px;">
                                 <div style="margin-bottom: 4px;">
                                     <span style="font-size: 12px; color: var(--text-muted);">Tại truyện: </span>
-                                    <a href="detail.php?id=<?= $cmt['ArticleID'] ?>" class="act-link">
+                                    <a href="<?= BASE_URL ?>truyen/<?= $cmt['ArticleID'] ?>" class="act-link">
                                         <?= htmlspecialchars($cmt['ArticleTitle']) ?>
                                     </a>
                                 </div>

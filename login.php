@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="tab-item active">
                     <i class="fas fa-sign-in-alt"></i> Đăng nhập
                 </div>
-                <a href="register.php" class="tab-item inactive">
+                <a href="<?= BASE_URL ?>register" class="tab-item inactive">
                     <i class="fas fa-user-plus"></i> Đăng ký
                 </a>
             </div>

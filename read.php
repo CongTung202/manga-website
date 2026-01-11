@@ -125,12 +125,12 @@ require_once 'includes/header.php';
 
 <div class="viewer-toolbar">
     <div class="toolbar-left">
-        <a href="detail.php?id=<?= $articleId ?>" class="btn-back">
+        <a href="<?= BASE_URL ?>truyen/<?= $articleId ?>" class="btn-back">
             <i class="fa-solid fa-chevron-left"></i>
         </a>
         
         <h1 class="chapter-title">  
-            <a href="detail.php?id=<?= $articleId ?>" class="btn-home">
+            <a href="<?= BASE_URL ?>truyen/<?= $articleId ?>" class="btn-home">
                 <i class="fa-solid fa-house me-1"></i>
                 <span class="webtoon-name"><?= htmlspecialchars($chapter['ArticleTitle']) ?></span>
             </a>
@@ -152,12 +152,12 @@ require_once 'includes/header.php';
         </button>
 
         <span class="divider">|</span>
-        <a href="detail.php?id=<?= $articleId ?>#chapter-list" class="btn-toolbar">
+        <a href="<?= BASE_URL ?>truyen/<?= $articleId ?>#chapter-list" class="btn-toolbar">
             <i class="fa-solid fa-list-ul"></i> DS chương
         </a>
         <span class="divider">|</span>
         
-        <a href="<?= $nextChap ? "read.php?id=$articleId&chap={$nextChap['ChapterID']}" : '#' ?>" 
+        <a href="<?= $nextChap ? BASE_URL . 'doc/' . $articleId . '/' . $nextChap['ChapterID'] : '#' ?>" 
            class="btn-toolbar nav-arrow <?= !$nextChap ? 'disabled' : '' ?>">
             Sau <i class="fa-solid fa-caret-right ms-1"></i>
         </a>
@@ -182,18 +182,18 @@ require_once 'includes/header.php';
         <p style="margin-bottom: 20px; color: var(--text-muted);">Hết Chapter <?= $chapter['Index'] ?></p>
         
         <div style="display: flex; justify-content: center; gap: 15px;">
-            <a href="<?= $prevChap ? "read.php?id=$articleId&chap={$prevChap['ChapterID']}" : '#' ?>" 
+            <a href="<?= $prevChap ? BASE_URL . 'doc/' . $articleId . '/' . $prevChap['ChapterID'] : '#' ?>" 
                class="btn-nav-round <?= !$prevChap ? 'disabled' : '' ?>" 
                style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-main);">
                <i class="fa-solid fa-chevron-left"></i>
             </a>
 
-            <a href="detail.php?id=<?= $articleId ?>" 
+            <a href="<?= BASE_URL ?>truyen/<?= $articleId ?>" 
                style="padding: 8px 30px; border-radius: 20px; border: 1px solid var(--border-color); color: var(--text-main); font-weight: bold; background: var(--bg-element);">
                Danh sách
             </a>
 
-            <a href="<?= $nextChap ? "read.php?id=$articleId&chap={$nextChap['ChapterID']}" : '#' ?>" 
+            <a href="<?= $nextChap ? BASE_URL . 'doc/' . $articleId . '/' . $nextChap['ChapterID'] : '#' ?>" 
                class="btn-nav-round <?= !$nextChap ? 'disabled' : '' ?>" 
                style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-main);">
                <i class="fa-solid fa-chevron-right"></i>

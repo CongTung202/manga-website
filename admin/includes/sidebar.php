@@ -42,7 +42,7 @@
     <div class="sidebar-menu" style="padding: 15px; overflow-y:auto;">
         <ul class="list-unstyled m-0">
             <li>
-                <a href="<?= BASE_URL ?>admin/index.php" 
+                <a href="<?= ADMIN_URL ?>" 
                    class="nav-link-admin <?= basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : '' ?>">
                     <i class="fas fa-th-large"></i> Tổng quan
                 </a>
@@ -51,14 +51,14 @@
             <li class="menu-header">Nội dung</li>
             
             <li>
-                <a href="<?= BASE_URL ?>admin/modules/articles/index.php" 
+                <a href="<?= ADMIN_MODULES_URL ?>articles/" 
                    class="nav-link-admin <?= strpos($_SERVER['PHP_SELF'], 'modules/articles') !== false ? 'active' : '' ?>">
                     <i class="fas fa-book-open"></i> Quản lý Truyện
                 </a>
             </li>
 
             <li>
-                <a href="<?= BASE_URL ?>admin/modules/genres/index.php" 
+                <a href="<?= ADMIN_MODULES_URL ?>genres/" 
                    class="nav-link-admin <?= strpos($_SERVER['PHP_SELF'], 'modules/genres') !== false ? 'active' : '' ?>">
                    <i class="fas fa-tags"></i> Thể loại
                 </a>
@@ -67,26 +67,26 @@
             <li class="menu-header">Người dùng & Tương tác</li>
 
             <li>
-                <a href="<?= BASE_URL ?>admin/modules/users/index.php"
+                <a href="<?= ADMIN_MODULES_URL ?>users/"
                    class="nav-link-admin <?= strpos($_SERVER['PHP_SELF'], 'modules/users') !== false ? 'active' : '' ?>">
                     <i class="fas fa-users"></i> Thành viên
                 </a>
             </li>
             
             <li>
-                <a href="<?= BASE_URL ?>admin/modules/comments/index.php"
+                <a href="<?= ADMIN_MODULES_URL ?>comments/"
                    class="nav-link-admin <?= strpos($_SERVER['PHP_SELF'], 'modules/comments') !== false ? 'active' : '' ?>">
                     <i class="fas fa-comments"></i> Bình luận
                 </a>
             </li>
 
             <li class="mt-4 border-top pt-3" style="border-color: var(--border-color)!important;">
-                <a href="<?= BASE_URL ?>index.php" target="_blank" class="nav-link-admin">
+                <a href="<?= BASE_URL ?>" target="_blank" class="nav-link-admin">
                     <i class="fas fa-external-link-alt"></i> Xem trang chủ
                 </a>
             </li>
             <li>
-                <a href="<?= BASE_URL ?>logout.php" class="nav-link-admin" style="color: #ff6b6b;" onclick="return confirm('Đăng xuất?')">
+                <a href="<?= BASE_URL ?>logout" class="nav-link-admin" style="color: #ff6b6b;" onclick="return confirm('Đăng xuất?')">
                     <i class="fas fa-sign-out-alt"></i> Đăng xuất
                 </a>
             </li>

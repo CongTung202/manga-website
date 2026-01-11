@@ -22,7 +22,7 @@ $articlesTop = $stmtTop->fetchAll();
 
         <div class="card-list">
             <?php foreach($articlesNew as $art): ?>
-            <article class="card" onclick="window.location.href='detail.php?id=<?= $art['ArticleID'] ?>'">
+            <article class="card" onclick="window.location.href='<?= BASE_URL ?>truyen/<?= $art['ArticleID'] ?>'">
                 <div class="card__thumb">
                     <?php if($art['CoverImage']): ?>
                         <img src="<?= getImageUrl($art['CoverImage']) ?>" alt="<?= htmlspecialchars($art['Title']) ?>">
@@ -47,7 +47,7 @@ $articlesTop = $stmtTop->fetchAll();
 
         <div class="card-list">
             <?php $rank = 1; foreach($articlesTop as $art): ?>
-            <article class="card" onclick="window.location.href='detail.php?id=<?= $art['ArticleID'] ?>'">
+            <article class="card" onclick="window.location.href='<?= BASE_URL ?>truyen/<?= $art['ArticleID'] ?>'">
                 <div class="card__thumb">
                     <?php if($art['CoverImage']): ?>
                         <img src="<?= getImageUrl($art['CoverImage']) ?>" alt="<?= htmlspecialchars($art['Title']) ?>">

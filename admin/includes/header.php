@@ -1,3 +1,12 @@
+<?php
+// GỌI FILE CẤU HÌNH CHÍNH (config.php)
+require_once dirname(dirname(__DIR__)) . '/includes/config.php';
+
+// BẮT BUỘC: Khởi động session
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
