@@ -16,6 +16,21 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_img' && isset($_GET['im
     exit;
 }
 
+// XỬ LÝ CẬP NHẬT VỊ TRÍ ẢNH (AJAX)
+if (isset($_GET['action']) && $_GET['action'] == 'update_sort' && isset($_POST['image_id']) && isset($_POST['sort_order'])) {
+    header('Content-Type: application/json');
+    $imgId = $_POST['image_id'];
+    $sortOrder = $_POST['sort_order'];
+    
+    $stmt = $pdo->prepare("UPDATE chapter_images SET SortOrder = ? WHERE ImageID = ?");
+    if ($stmt->execute([$sortOrder, $imgId])) {
+        echo json_encode(['success' => true, 'message' => 'Cập nhật vị trí thành công']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Lỗi cập nhật vị trí']);
+    }
+    exit;
+}
+
 // LẤY DỮ LIỆU CHAPTER
 $stmt = $pdo->prepare("SELECT * FROM chapters WHERE ChapterID = ?");
 $stmt->execute([$id]);
@@ -92,23 +107,53 @@ require_once '../../includes/sidebar.php';
             </div>
 
             <div class="mb-3">
-                <label class="fw-bold mb-2">Ảnh hiện tại của chương:</label>
-                <div class="d-flex flex-wrap gap-2 border border-secondary p-3 rounded" style="max-height: 400px; overflow-y: auto; background-color: var(--bg-body);">
-                    <?php foreach($images as $img): ?>
-                        <div class="position-relative" style="width: 120px;">
-                            <img src="<?= getImageUrl($img['ImageURL']) ?>" class="w-100 rounded border border-secondary" loading="lazy">
-                            
-                            <a href="edit.php?id=<?= $id ?>&article_id=<?= $articleId ?>&action=delete_img&img_id=<?= $img['ImageID'] ?>" 
-                               class="position-absolute top-0 end-0 badge bg-danger text-decoration-none shadow-sm"
-                               style="margin: 2px;"
-                               onclick="return confirm('Xóa ảnh này?')">
-                               <i class="fas fa-times"></i>
-                            </a>
-                            <small class="d-block text-center text-muted mt-1" style="font-size: 10px;">Order: <?= $img['SortOrder'] ?></small>
-                        </div>
-                    <?php endforeach; ?>
-                    <?php if(count($images) == 0) echo '<p class="text-muted small m-2">Chưa có ảnh nào.</p>'; ?>
+                <label class="fw-bold mb-2">Ảnh hiện tại của chương (Thay đổi vị trí):</label>
+                <div class="table-responsive border border-secondary rounded" style="max-height: 500px; overflow-y: auto; background-color: var(--bg-body);">
+                    <table class="table table-hover m-0">
+                        <thead class="sticky-top" style="background-color: var(--bg-secondary);">
+                            <tr>
+                                <th style="width: 80px;">Ảnh</th>
+                                <th style="width: 120px;">Vị trí (Order)</th>
+                                <th style="width: 100px;">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($images as $img): ?>
+                                <tr>
+                                    <td>
+                                        <img src="<?= getImageUrl($img['ImageURL']) ?>" style="width: 60px; height: 80px; object-fit: cover;" class="rounded border">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control sort-input" 
+                                               data-img-id="<?= $img['ImageID'] ?>" 
+                                               value="<?= $img['SortOrder'] ?>" 
+                                               min="0" step="1">
+                                        <small class="text-muted d-block mt-1">ID: <?= $img['ImageID'] ?></small>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-primary update-order-btn" 
+                                                data-img-id="<?= $img['ImageID'] ?>">
+                                            <i class="fas fa-sync-alt"></i> Cập nhật
+                                        </button>
+                                        <a href="edit.php?id=<?= $id ?>&article_id=<?= $articleId ?>&action=delete_img&img_id=<?= $img['ImageID'] ?>" 
+                                           class="btn btn-sm btn-danger"
+                                           onclick="return confirm('Xóa ảnh này?')">
+                                           <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php if(count($images) == 0): ?>
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-3">Chưa có ảnh nào.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
+                <small class="d-block text-muted mt-2">
+                    <i class="fas fa-info-circle"></i> Nhập số thứ tự mong muốn rồi nhấn "Cập nhật" để thay đổi vị trí ảnh
+                </small>
             </div>
 
             <div class="mb-3">
@@ -124,5 +169,61 @@ require_once '../../includes/sidebar.php';
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý nút cập nhật vị trí
+    const updateBtns = document.querySelectorAll('.update-order-btn');
+    
+    updateBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const imgId = this.getAttribute('data-img-id');
+            const input = document.querySelector(`input.sort-input[data-img-id="${imgId}"]`);
+            const sortOrder = input.value;
+            
+            // Xác nhận trước khi cập nhật
+            if (!confirm(`Bạn muốn đặt ảnh này ở vị trí ${sortOrder}?`)) {
+                return;
+            }
+            
+            // Gửi AJAX request
+            fetch(`edit.php?id=<?= $id ?>&article_id=<?= $articleId ?>&action=update_sort`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `image_id=${imgId}&sort_order=${sortOrder}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✓ Cập nhật vị trí thành công!');
+                    // Làm mới trang sau 1 giây
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    alert('✗ ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi:', error);
+                alert('✗ Có lỗi xảy ra. Vui lòng thử lại.');
+            });
+        });
+    });
+    
+    // Cho phép nhấn Enter để cập nhật
+    const inputs = document.querySelectorAll('.sort-input');
+    inputs.forEach(input => {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const btn = this.closest('tr').querySelector('.update-order-btn');
+                btn.click();
+            }
+        });
+    });
+});
+</script>
 
 <?php require_once '../../includes/footer.php'; ?>
