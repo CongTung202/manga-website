@@ -1,0 +1,410 @@
+/* 
+==============================================
+🎨 RESPONSIVE DESIGN - MANGA WEBSITE
+Breakpoints cho các thiết bị hiện đại
+==============================================
+
+BREAKPOINTS:
+- Mobile: < 576px (điện thoại nhỏ)
+- Tablet: 576px - 991px (iPad mini, tablet)
+- Laptop: 992px - 1366px (laptop thường)
+- Desktop: > 1366px (desktop/4k)
+
+STRATEGY: Mobile-first approach
+==============================================
+*/
+
+/* ========== BASE MOBILE STYLES (< 576px) ========== */
+
+@media (max-width: 575px) {
+    /* --- RESPONSIVE CONTAINER --- */
+    .container, .header__container, .nav__container, .main-container {
+        max-width: 100%;
+        padding: 0 12px;
+    }
+
+    /* --- HEADER MOBILE --- */
+    .header {
+        padding: 12px 0;
+    }
+    .header__container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .header__logo {
+        font-size: 16px;
+        order: 1;
+    }
+    .header__search {
+        width: 100%;
+        order: 3;
+    }
+    .header__search input {
+        font-size: 14px; /* Tránh zoom on focus */
+    }
+    .header__right {
+        order: 2;
+        display: flex;
+        gap: 8px;
+    }
+
+    /* --- NAV MOBILE --- */
+    .nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+    }
+    .nav__container {
+        gap: 0;
+        padding: 0 12px;
+    }
+    .nav__item {
+        margin-right: 0;
+        padding: 0 12px;
+        min-width: max-content;
+        font-size: 12px;
+    }
+    .nav__btn-creator {
+        min-width: 70px;
+        font-size: 10px;
+    }
+
+    /* --- MAIN LAYOUT --- */
+    .main-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .content { flex: 1; }
+    .sidebar {
+        flex: 1;
+        order: 2; /* Sidebar xuống dưới */
+    }
+
+    /* --- CARD LIST MOBILE (1 cột) --- */
+    .card-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .card__thumb {
+        height: 150px;
+    }
+    .card__title {
+        font-size: 12px;
+        -webkit-line-clamp: 2;
+    }
+    .card__author {
+        font-size: 10px;
+    }
+
+    /* --- NEW LIST MOBILE --- */
+    .new-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .new-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* --- SECTION HEADER --- */
+    .section__header {
+        flex-wrap: wrap;
+    }
+    .section__header h3 {
+        font-size: 16px;
+        flex: 1;
+    }
+    .section__view-all {
+        flex-basis: 100%;
+        margin-top: 8px;
+    }
+
+    /* --- DETAIL PAGE MOBILE --- */
+    .detail-info {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .detail-thumb {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+    .detail-meta h1 {
+        font-size: 18px;
+    }
+
+    /* --- CHAPTERS LIST MOBILE --- */
+    .chapter-list {
+        grid-template-columns: 1fr;
+    }
+    .chapter-item {
+        flex-direction: row;
+        padding: 10px;
+    }
+
+    /* --- RATING BOX MOBILE --- */
+    .rating-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* --- BUTTON --- */
+    .btn-action {
+        display: block;
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .btn-read, .btn-follow {
+        width: 100%;
+    }
+
+    /* --- DIVIDER --- */
+    .divider {
+        margin: 20px 0;
+    }
+
+    /* --- SECTION SPACING --- */
+    .section {
+        margin-bottom: 30px;
+    }
+
+    /* --- COMMENT SECTION --- */
+    .comment-form textarea {
+        font-size: 14px;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+        padding: 15px;
+        font-size: 11px;
+    }
+}
+
+/* ========== TABLET STYLES (576px - 991px) ========== */
+
+@media (min-width: 576px) and (max-width: 991px) {
+    .container, .header__container, .nav__container, .main-container {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+
+    /* --- HEADER TABLET --- */
+    .header {
+        padding: 15px 0;
+    }
+    .header__search {
+        width: 300px;
+    }
+
+    /* --- NAV TABLET --- */
+    .nav__container {
+        gap: 0;
+    }
+    .nav__item {
+        margin-right: 0;
+        padding: 0 12px;
+        font-size: 13px;
+    }
+
+    /* --- MAIN LAYOUT --- */
+    .main-container {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    /* --- CARD LIST TABLET (2-3 cột) --- */
+    .card-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    .card__thumb {
+        height: 160px;
+    }
+
+    /* --- NEW LIST TABLET --- */
+    .new-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    /* --- SIDEBAR TABLET --- */
+    .sidebar {
+        width: 100%;
+    }
+    .sidebar-box {
+        margin-bottom: 20px;
+    }
+
+    /* --- DETAIL PAGE TABLET --- */
+    .detail-info {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .detail-thumb {
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto;
+    }
+
+    /* --- BUTTON TABLET --- */
+    .btn-action {
+        padding: 10px 20px;
+        display: inline-block;
+        width: auto;
+    }
+
+    /* --- HEADING --- */
+    .section__header h3 {
+        font-size: 18px;
+    }
+}
+
+/* ========== LAPTOP STYLES (992px - 1366px) ========== */
+
+@media (min-width: 992px) and (max-width: 1365px) {
+    .container, .header__container, .nav__container, .main-container {
+        max-width: 1000px;
+        padding: 0 20px;
+    }
+
+    /* --- CARD LIST LAPTOP --- */
+    .card-list {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    /* --- NEW LIST LAPTOP --- */
+    .new-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    /* --- DETAIL PAGE --- */
+    .detail-info {
+        flex-direction: row;
+        gap: 25px;
+    }
+    .detail-thumb {
+        width: 200px;
+    }
+}
+
+/* ========== DESKTOP STYLES (> 1366px) ========== */
+
+@media (min-width: 1366px) {
+    .container, .header__container, .nav__container, .main-container {
+        max-width: 1200px;
+    }
+
+    /* --- CARD LIST DESKTOP --- */
+    .card-list {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+    }
+
+    /* --- NEW LIST DESKTOP --- */
+    .new-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+}
+
+/* ========== ORIENTATION FIXES ========== */
+
+/* Landscape mode trên mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .header__search {
+        width: 200px;
+    }
+    .nav {
+        height: 35px;
+    }
+    .nav__item {
+        font-size: 11px;
+        padding: 0 8px;
+    }
+}
+
+/* ========== PRINT STYLES ========== */
+
+@media print {
+    .header, .nav, .sidebar, .btn-action, .comment-form {
+        display: none !important;
+    }
+    .card-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    body {
+        background: white;
+        color: black;
+    }
+}
+
+/* ========== TOUCH DEVICE OPTIMIZATION ========== */
+
+@media (hover: none) and (pointer: coarse) {
+    /* Các button lớn hơn cho touch */
+    .btn-action {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+    .card {
+        margin-bottom: 5px;
+    }
+    /* Bỏ hover effect vì không cần thiết */
+    .card:hover .card__thumb img {
+        transform: none;
+    }
+}
+
+/* ========== HIGH RESOLUTION DISPLAYS ========== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    /* Hình ảnh sắc nét hơn trên Retina/HiDPI */
+    .card__thumb img {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* ========== SMALL TEXT SIZE PREFERENCE ========== */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========== DARK MODE MEDIA QUERY ========== */
+
+@media (prefers-color-scheme: dark) {
+    /* Nếu hệ thống là dark mode, apply dark styles */
+}
+
+@media (prefers-color-scheme: light) {
+    /* Nếu hệ thống là light mode */
+}
+
+/* ========== SPECIFIC DEVICE FIXES ========== */
+
+/* iPhone X/11/12/13/14 notch support */
+@supports (padding: max(0px)) {
+    .header__container {
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+    }
+}
+
+/* Samsung Fold support */
+@media (max-width: 300px) {
+    .header__search {
+        display: none;
+    }
+    .card-list {
+        grid-template-columns: 1fr;
+    }
+}

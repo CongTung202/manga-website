@@ -1,0 +1,636 @@
+/* 
+==============================================
+📱 RESPONSIVE STYLES CHO CÁC TRANG CỤ THỂ
+==============================================
+*/
+
+/* ==================== TRANG DETAIL.PHP ==================== */
+
+/* Mobile */
+@media (max-width: 575px) {
+    /* Detail Info Section */
+    .detail-info {
+        display: block;
+        padding: 15px;
+        background-color: var(--bg-element);
+    }
+
+    .detail-thumb {
+        width: 100%;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    .detail-thumb img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .detail-meta h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .detail-row {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .detail-desc {
+        font-size: 12px;
+        margin-top: 15px;
+        line-height: 1.5;
+    }
+
+    /* Button Group */
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 15px;
+    }
+
+    .btn-action {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 14px;
+        min-height: 44px;
+    }
+
+    /* Rating Section */
+    .rating-section {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: var(--bg-element);
+    }
+
+    /* Chapter List */
+    .chapter-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet */
+@media (min-width: 576px) and (max-width: 991px) {
+    .detail-info {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .detail-thumb {
+        width: 100%;
+    }
+
+    .detail-meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .detail-meta h1 {
+        font-size: 20px;
+    }
+
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .chapter-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Laptop + */
+@media (min-width: 992px) {
+    .detail-info {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .chapter-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ==================== TRANG GENRES.PHP ==================== */
+
+/* Mobile */
+@media (max-width: 575px) {
+    .genre-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 10px;
+    }
+
+    .btn-genre {
+        padding: 6px 12px;
+        font-size: 11px;
+        white-space: nowrap;
+        border-radius: 15px;
+    }
+
+    .genre-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .genre-item {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .genre-item img {
+        width: 60px;
+        height: 80px;
+        object-fit: cover;
+    }
+
+    .genre-item-info {
+        flex: 1;
+    }
+
+    .genre-item-title {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 20px;
+    }
+
+    .pagination a,
+    .pagination span {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 576px) and (max-width: 991px) {
+    .genre-nav {
+        flex-wrap: wrap;
+        overflow-x: auto;
+    }
+
+    .btn-genre {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .genre-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .genre-item {
+        flex-direction: column;
+    }
+}
+
+/* Laptop + */
+@media (min-width: 992px) {
+    .genre-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .genre-item {
+        flex-direction: column;
+    }
+}
+
+/* ==================== TRANG READ.PHP (ĐỌC TRUYỆN) ==================== */
+
+/* Mobile */
+@media (max-width: 575px) {
+    .reader-container {
+        padding: 0;
+        margin: 0;
+    }
+
+    .reader-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: var(--bg-element);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        font-size: 12px;
+    }
+
+    .chapter-title {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .chapter-images {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .chapter-images img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .reader-controls {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        background-color: var(--bg-element);
+        gap: 5px;
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
+    }
+
+    .reader-btn {
+        flex: 1;
+        padding: 10px 5px;
+        font-size: 11px;
+        min-height: 40px;
+    }
+
+    .reader-comment-section {
+        padding: 10px;
+        margin-top: 15px;
+    }
+
+    .comment-form textarea {
+        font-size: 14px;
+        min-height: 80px;
+    }
+
+    .comment-item {
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .comment-avatar {
+        width: 30px;
+        height: 30px;
+    }
+
+    .comment-content {
+        font-size: 12px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 576px) and (max-width: 991px) {
+    .chapter-images img {
+        max-width: 100%;
+        height: auto;
+        margin: 10px auto;
+        display: block;
+    }
+
+    .reader-controls {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .reader-btn {
+        padding: 12px 15px;
+        font-size: 12px;
+    }
+
+    .comment-section {
+        max-width: 600px;
+        margin: 30px auto;
+    }
+}
+
+/* Laptop + */
+@media (min-width: 992px) {
+    .reader-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .chapter-images {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chapter-images img {
+        max-width: 800px;
+        height: auto;
+        margin: 20px 0;
+    }
+
+    .comment-section {
+        max-width: 800px;
+        margin: 40px auto;
+    }
+
+    .reader-controls {
+        display: flex;
+        justify-content: space-around;
+        gap: 15px;
+        margin: 30px 0;
+    }
+}
+
+/* ==================== TRANG INDEX.PHP (TRANG CHỦ) ==================== */
+
+/* Mobile */
+@media (max-width: 575px) {
+    .home-hero {
+        height: 200px;
+        padding: 20px;
+    }
+
+    .home-hero-title {
+        font-size: 16px;
+    }
+
+    .home-hero-desc {
+        font-size: 11px;
+        margin-top: 10px;
+    }
+
+    .featured-section {
+        margin-bottom: 30px;
+    }
+
+    .featured-banner {
+        height: 150px;
+        border-radius: 4px;
+    }
+
+    .featured-content {
+        padding: 10px;
+    }
+
+    .trending-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .trending-item {
+        padding: 10px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 576px) and (max-width: 991px) {
+    .home-hero {
+        height: 250px;
+        padding: 30px;
+    }
+
+    .home-hero-title {
+        font-size: 18px;
+    }
+
+    .trending-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+
+    .featured-banner {
+        height: 200px;
+    }
+}
+
+/* Laptop + */
+@media (min-width: 992px) {
+    .home-hero {
+        height: 300px;
+        padding: 40px;
+    }
+
+    .home-hero-title {
+        font-size: 20px;
+    }
+
+    .trending-list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+}
+
+/* ==================== SEARCH RESULTS ==================== */
+
+@media (max-width: 575px) {
+    .search-results {
+        grid-template-columns: 1fr;
+    }
+
+    .search-result-item {
+        display: flex;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .search-result-thumb {
+        width: 50px;
+        height: 70px;
+    }
+
+    .search-result-info {
+        flex: 1;
+    }
+
+    .search-result-title {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .search-result-desc {
+        font-size: 10px;
+        margin-top: 5px;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+    .search-results {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (min-width: 992px) {
+    .search-results {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+/* ==================== SIDEBAR RESPONSIVE ==================== */
+
+@media (max-width: 991px) {
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar-box {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 575px) {
+    .sidebar-box {
+        padding: 12px;
+    }
+
+    .sidebar-box h4 {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .ranking-item {
+        padding: 8px 0;
+    }
+
+    .ranking-item img {
+        width: 40px;
+        height: 55px;
+    }
+
+    .rank-info h4 {
+        font-size: 11px;
+    }
+
+    .rank-info p {
+        font-size: 9px;
+    }
+}
+
+/* ==================== FOOTER ==================== */
+
+@media (max-width: 575px) {
+    footer {
+        padding: 15px;
+        text-align: center;
+    }
+
+    footer p {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+}
+
+@media (min-width: 576px) {
+    footer {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 30px;
+    }
+}
+
+/* ==================== FORMS & INPUTS ==================== */
+
+@media (max-width: 575px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        width: 100%;
+        font-size: 14px; /* Tránh zoom khi focus */
+        padding: 12px 10px;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+}
+
+/* ==================== MODALS & POPUPS ==================== */
+
+@media (max-width: 575px) {
+    .modal-content {
+        width: 90vw;
+        max-width: 100%;
+    }
+
+    .modal-header {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .modal-body {
+        padding: 15px;
+        font-size: 12px;
+    }
+
+    .modal-footer {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .modal-footer button {
+        flex: 1;
+        padding: 10px;
+        font-size: 12px;
+    }
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+/* Disable animations trên thiết bị di động để tiết kiệm pin */
+@media (max-width: 575px) {
+    .card:hover .card__thumb img {
+        transform: none;
+    }
+
+    .nav__item:hover {
+        opacity: 0.8;
+    }
+
+    .btn-action:active {
+        opacity: 0.8;
+    }
+}
+
+/* ==================== STICKY ELEMENTS ==================== */
+
+@media (max-width: 575px) {
+    /* Sắp xếp lại sticky elements cho mobile */
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .nav {
+        position: sticky;
+        top: 50px; /* Dưới header */
+        z-index: 999;
+    }
+}

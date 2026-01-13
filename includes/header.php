@@ -17,6 +17,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="<?= BASE_URL ?>css/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/responsive.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/pages-responsive.css?v=<?= time() ?>">
     
     <!-- Theme Cookie Manager - Phải load trước body để tránh flashing -->
     <script>
