@@ -53,10 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body>
 
-    <div class="lang-dropdown">
-        English <i class="fas fa-chevron-down ms-1"></i>
-    </div>
-
     <div class="login-wrapper">
         
         <h1 class="login-logo">GTSC<strong>HUNDER</strong></h1>

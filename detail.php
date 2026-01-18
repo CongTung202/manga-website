@@ -1,12 +1,12 @@
 <?php
 require_once 'includes/db.php';
-require_once 'includes/functions.php'; // Gọi file này để dùng getImageUrl
+require_once 'includes/functions.php';
 
 // 1. Lấy ID
 $id = $_GET['id'] ?? null;
 if (!$id) die("Không tìm thấy truyện.");
 
-// --- [LOGIC MỚI] KIỂM TRA SESSION ĐỂ TRÁNH SPAM VIEW ---
+// --- [LOGIC] KIỂM TRA SESSION ĐỂ TRÁNH SPAM VIEW ---
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_SESSION['viewed_articles'])) {
@@ -30,8 +30,16 @@ $article = $stmt->fetch();
 
 if (!$article) die("Truyện không tồn tại.");
 
-// 3. Lấy Chapter
-$sqlChap = "SELECT * FROM chapters WHERE ArticleID = ? AND IsDeleted = 0 ORDER BY `Index` DESC";
+// 3. Lấy Chapter (ĐÃ SỬA)
+// Lưu ý: Bạn cần thay 'chapter_images' và 'ImageURL' đúng với tên bảng/cột trong database của bạn
+$sqlChap = "SELECT c.*, 
+            (SELECT ImageURL FROM chapter_images ci 
+             WHERE ci.ChapterID = c.ChapterID 
+             ORDER BY ci.ImageID ASC LIMIT 1) as ChapterThumb 
+            FROM chapters c 
+            WHERE c.ArticleID = ? AND c.IsDeleted = 0 
+            ORDER BY c.`Index` DESC";
+
 $stmtChap = $pdo->prepare($sqlChap);
 $stmtChap->execute([$id]);
 $chapters = $stmtChap->fetchAll();
@@ -48,136 +56,137 @@ $pageTitle = htmlspecialchars($article['Title']);
 require_once 'includes/header.php'; 
 ?>
 
-<style>
-    /* CSS Riêng cho trang Detail (Dark Theme) */
-    .detail-info { 
-        display: flex; gap: 30px; margin-bottom: 40px; 
-        background-color: var(--bg-element); padding: 20px; border-radius: 4px;
-        border: 1px solid var(--border-color);
-    }
-    .detail-thumb { width: 220px; flex-shrink: 0; position: relative; }
-    .detail-thumb img { width: 100%; border-radius: 4px; border: 1px solid var(--border-color); }
-    
-    .detail-meta h1 { font-size: 24px; color: var(--text-main); margin-bottom: 10px; }
-    .detail-row { margin-bottom: 10px; font-size: 14px; color: var(--text-muted); }
-    .detail-row strong { color: var(--text-main); margin-right: 10px; }
-    .detail-desc { margin-top: 20px; line-height: 1.6; color: #bbb; font-size: 14px; }
-    
-    .btn-action {
-        display: inline-block; padding: 10px 25px; border-radius: 4px; font-weight: bold; margin-right: 10px; cursor: pointer; text-align: center;
-        transition: 0.2s; border: none; font-size: 14px;
-    }
-    .btn-read { background: var(--primary-theme); color: #fff; text-decoration: none; }
-    .btn-read:hover { opacity: 0.9; color: #fff; }
-    
-    .btn-follow { background: transparent; border: 1px solid var(--primary-theme); color: var(--primary-theme); }
-    .btn-follow:hover { background: var(--primary-theme); color: #fff; }
-    
-    /* Trạng thái Active (Đã theo dõi) */
-    .btn-follow.active { background: #444; border-color: #444; color: #aaa; }
-    .btn-follow.active:hover { background: #d63031; border-color: #d63031; color: #fff; } /* Hover vào thì hiện màu đỏ báo hiệu hủy */
-
-    /* Chapter List Style */
-    .chapter-list-header { border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px; font-weight: bold; font-size: 16px; }
-    .chapter-item { 
-        display: flex; justify-content: space-between; padding: 12px 10px; 
-        border-bottom: 1px solid var(--border-color); transition: 0.2s; text-decoration: none;
-    }
-    .chapter-item:hover { background-color: var(--bg-hover); }
-    .chap-name { color: var(--text-main); font-weight: bold; }
-    .chap-date { color: var(--text-muted); font-size: 12px; }
-</style>
+<link rel="stylesheet" href="<?= BASE_URL ?>css/detail.css">
 
 <div class="main-container">
-<main class="content">
-    
-    <div class="detail-info">
-        <div class="detail-thumb">
-            <?php if($article['CoverImage']): ?>
-                <img src="<?= getImageUrl($article['CoverImage']) ?>" alt="Cover">
-            <?php else: ?>
-                <div style="width:100%; height:300px; background:#333; display:flex; align-items:center; justify-content:center;">No Image</div>
-            <?php endif; ?>
-        </div>
+    <main class="content">
         
-        <div class="detail-meta">
-            <h1><?= htmlspecialchars($article['Title']) ?></h1>
-            <div class="detail-row"><strong>Tác giả:</strong> <?= $article['Authors'] ?? 'Đang cập nhật' ?></div>
-            <div class="detail-row"><strong>Thể loại:</strong> <?= $article['Genres'] ?? 'Chưa phân loại' ?></div>
-            <div class="detail-row">
-                <strong>Trạng thái:</strong> 
-                <?= $article['Status'] == 1 ? '<span class="text-green">Đang tiến hành</span>' : 'Hoàn thành' ?>
-            </div>
-            <div class="detail-row"><strong>Lượt xem:</strong> <?= number_format($article['ViewCount']) ?></div>
-
-            <div class="detail-desc">
-                <?= nl2br(htmlspecialchars($article['Description'])) ?>
-            </div>
-
-            <div style="margin-top: 25px;">
-                <?php if(count($chapters) > 0): $firstChap = end($chapters); ?>
-                    <a href="<?= BASE_URL ?>chapter/<?= $article['ArticleID'] ?>/<?= $firstChap['ChapterID'] ?>" class="btn-action btn-read">
-                        <i class="fas fa-book-open"></i> Đọc ngay
-                    </a>
+        <div class="detail-header">
+            <div class="detail-thumb" id="cover-trigger">
+                <?php if($article['CoverImage']): ?>
+                    <img src="<?= getImageUrl($article['CoverImage']) ?>" alt="Cover" id="thumb-img">
+                    
+                    <div class="zoom-icon-corner">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                <?php else: ?>
+                    <div class="no-image">No Image</div>
                 <?php endif; ?>
+            </div>
 
-                <button id="btn-follow-detail" class="btn-action btn-follow <?= $isBookmarked ? 'active' : '' ?>" data-id="<?= $article['ArticleID'] ?>">
-                    <?php if ($isBookmarked): ?>
-                        <i class="fas fa-check"></i> <span>Đã theo dõi</span>
-                    <?php else: ?>
-                        <i class="fas fa-heart"></i> <span>Theo dõi</span>
+            <div id="image-modal" class="modal-overlay">
+                <span class="close-modal">&times;</span>
+                <img class="modal-content" id="full-image">
+                <div id="caption"></div>
+            </div>
+            
+            <div class="detail-info-right">
+                <h1 class="story-title"><?= htmlspecialchars($article['Title']) ?></h1>
+                
+                <div class="meta-line author">
+                    <span><?= $article['Authors'] ?? 'Tác giả đang cập nhật' ?></span>
+                </div>
+
+                <div class="story-desc">
+                    <?= nl2br(htmlspecialchars($article['Description'])) ?>
+                </div>
+
+                <div class="meta-tags">
+                    <?php 
+                    if (!empty($article['Genres'])) {
+                        $tags = explode(', ', $article['Genres']);
+                        foreach($tags as $tag) {
+                            echo '<span class="tag-item">#' . htmlspecialchars(trim($tag)) . '</span>';
+                        }
+                    }
+                    ?>
+                </div>
+
+                <div class="action-bar">
+                    <button id="btn-follow-detail" class="btn-naver-green <?= $isBookmarked ? 'active' : '' ?>" data-id="<?= $article['ArticleID'] ?>">
+                        <?php if ($isBookmarked): ?>
+                            <i class="fas fa-check"></i> <span>Đã quan tâm</span>
+                        <?php else: ?>
+                            <i class="fas fa-plus"></i> <span>Quan tâm</span>
+                        <?php endif; ?>
+                        <span class="count"><?= number_format($article['ViewCount']) ?></span> </button>
+
+                    <?php if(count($chapters) > 0): $firstChap = end($chapters); ?>
+                        <a href="<?= BASE_URL ?>chapter/<?= $article['ArticleID'] ?>/<?= $firstChap['ChapterID'] ?>" class="btn-naver-white">
+                            Đọc tập 1
+                        </a>
                     <?php endif; ?>
-                </button>
+                    
+                    <button class="btn-naver-white share-btn">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <section class="section">
-        <div class="chapter-list-header">Danh sách chương</div>
-        <div style="max-height: 500px; overflow-y: auto; padding-right: 5px;">
+        <div class="divider"></div>
+
+        <section class="chapter-section">
+            <div class="section-title">Tổng <?= count($chapters) ?> tập</div>
+            
+        <div class="chapter-list">
             <?php if(count($chapters) > 0): ?>
                 <?php foreach($chapters as $chap): ?>
-                    <a href="<?= BASE_URL ?>chapter/<?= $id ?>/<?= $chap['ChapterID'] ?>" class="chapter-item">
-                        <span class="chap-name">Chapter <?= $chap['Index'] ?> <?= $chap['Title'] ? '- '.htmlspecialchars($chap['Title']) : '' ?></span>
-                        <span class="chap-date"><?= date('d/m/Y', strtotime($chap['CreatedAt'])) ?></span>
+                    <?php 
+                        // Xử lý logic chọn ảnh: Ưu tiên ảnh chương, nếu không có thì lấy ảnh bìa
+                        $thumbSrc = !empty($chap['ChapterThumb']) 
+                                    ? getImageUrl($chap['ChapterThumb']) 
+                                    : getImageUrl($article['CoverImage']);
+                    ?>
+                    <a href="<?= BASE_URL ?>chapter/<?= $id ?>/<?= $chap['ChapterID'] ?>" class="chapter-row">
+                        <div class="chap-thumb-img">
+                            <img src="<?= $thumbSrc ?>" alt="Chapter Thumb" loading="lazy">
+                        </div>
+
+                        <div class="chap-info">
+                            <span class="chap-title">
+                                Chapter <?= $chap['Index'] ?> <?= $chap['Title'] ? ': '.htmlspecialchars($chap['Title']) : '' ?>
+                            </span>
+                            <div class="chap-meta">
+                                <span class="chap-date"><?= date('y.m.d', strtotime($chap['CreatedAt'])) ?></span>
+                            </div>
+                        </div>
                     </a>
                 <?php endforeach; ?>
             <?php else: ?>
-                <p style="padding: 20px; text-align: center; color: var(--text-muted);">Chưa có chương nào.</p>
+                <p class="no-chap">Chưa có chương nào.</p>
             <?php endif; ?>
         </div>
-    </section>
+        </section>
 
-    <?php require_once 'includes/comment_section.php'; ?>
+        <?php require_once 'includes/comment_section.php'; ?>
 
-</main>
+    </main>
 
-<aside class="sidebar">
-    <?php include 'includes/right_sidebar.php'; ?>
-</aside>
+    <aside class="sidebar">
+        <?php include 'includes/right_sidebar.php'; ?>
+    </aside>
+</div>
 
 <script>
 document.getElementById('btn-follow-detail').addEventListener('click', function() {
     const btn = this;
     const articleId = btn.getAttribute('data-id');
     const icon = btn.querySelector('i');
-    const text = btn.querySelector('span');
+    const text = btn.querySelector('span:nth-child(2)'); // Chọn span text
 
-    // Gọi API (Backend)
     fetch('includes/action_bookmark.php?ajax=1&id=' + articleId)
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
             if (data.is_bookmarked) {
-                // Đã theo dõi -> Đổi sang style Active
                 btn.classList.add('active');
                 icon.className = 'fas fa-check';
-                text.innerText = 'Đã theo dõi';
+                text.innerText = 'Đã quan tâm';
             } else {
-                // Hủy theo dõi -> Đổi về style thường
                 btn.classList.remove('active');
-                icon.className = 'fas fa-heart';
-                text.innerText = 'Theo dõi';
+                icon.className = 'fas fa-plus';
+                text.innerText = 'Quan tâm';
             }
         } else if (data.status === 'login_required') {
             if(confirm("Bạn cần đăng nhập để theo dõi truyện. Đăng nhập ngay?")) {
@@ -189,6 +198,38 @@ document.getElementById('btn-follow-detail').addEventListener('click', function(
     })
     .catch(error => console.error('Error:', error));
 });
-</script>
 
-<?php require_once 'includes/footer.php'; ?>
+const modal = document.getElementById("image-modal");
+const thumbTrigger = document.getElementById("cover-trigger");
+const modalImg = document.getElementById("full-image");
+const thumbImg = document.getElementById("thumb-img");
+const spanClose = document.getElementsByClassName("close-modal")[0];
+
+// Khi click vào thumbnail -> Mở Modal
+if (thumbTrigger && thumbImg) {
+    thumbTrigger.onclick = function() {
+        modal.style.display = "flex"; // Dùng flex để căn giữa
+        modalImg.src = thumbImg.src;  // Lấy ảnh từ thumbnail gán vào ảnh to
+    }
+}
+
+// Khi click vào nút X -> Đóng
+spanClose.onclick = function() {
+    modal.style.display = "none";
+}
+
+// Khi click ra vùng ngoài ảnh (vùng đen) -> Đóng
+modal.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Bấm phím ESC cũng đóng
+document.addEventListener('keydown', function(event) {
+    if (event.key === "Escape" && modal.style.display === "flex") {
+        modal.style.display = "none";
+    }
+});
+
+</script>

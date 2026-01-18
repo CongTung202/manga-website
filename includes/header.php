@@ -4,7 +4,7 @@ require_once __DIR__ . '/config.php';
 // Gọi functions.php để dùng hàm getImageUrl
 require_once __DIR__ . '/functions.php';
 //loading
-require_once __DIR__ . '/loader.php';
+//require_once __DIR__ . '/loader.php';
 // Lấy tên file hiện tại
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>

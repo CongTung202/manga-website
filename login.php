@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="login-wrapper">
         
-        <h1 class="login-logo">GTSCHUNDER</h1>
+        <h1 class="login-logo"><a href=""></a>GTSCHUNDER</h1>
 
         <div class="login-card">
             
