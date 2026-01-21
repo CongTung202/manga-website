@@ -10,8 +10,11 @@ RewriteEngine On
 # Cho phép tải file từ thư mục uploads (ảnh, video)
 RewriteRule ^uploads/ - [L]
 
-# Cho phép POST đến includes/post_comment.php (form bình luận)
+# Cho phép POST/GET đến includes/post_comment.php (form bình luận)
 RewriteRule ^includes/post_comment\.php$ - [L]
+
+# Cho phép AJAX đến includes/action_bookmark.php (nút quan tâm)
+RewriteRule ^includes/action_bookmark\.php$ - [L]
 
 # Chặn truy cập vào thư mục includes (chứa các file cấu hình)
 RewriteRule ^includes/ - [F,L]

@@ -7,6 +7,99 @@
     padding: 0; 
 }
 
+/* --- TOAST NOTIFICATION --- */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.toast {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 4px;
+    min-width: 250px;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.toast.success {
+    background-color: #28a745;
+}
+
+.toast.error {
+    background-color: #dc3545;
+}
+
+.toast.warning {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.toast.info {
+    background-color: #17a2b8;
+}
+
+.toast i {
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+.toast-message {
+    flex: 1;
+    font-size: 14px;
+}
+
+.toast-close {
+    flex-shrink: 0;
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+/* Animation */
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+.toast.removing {
+    animation: slideOutRight 0.3s ease-out;
+}
+
 /* Ảnh bìa truyện */
 .detail-thumb {
     width: 200px;
@@ -94,32 +187,21 @@
     background-color: var(--primary-theme); /* Màu xanh đặc trưng */
     color: #fff;
     border: none;
-/* --- CÁC DÒNG CẦN SỬA --- */
-    width: 100%;             /* Có thể chiếm hết khung chứa */
-    max-width: 160px;        /* [QUAN TRỌNG] Giới hạn chiều rộng tối đa, dài hơn sẽ cắt */
-    padding: 0 10px;         /* Padding vừa phải */
-    
-    display: flex;           /* Dùng flex để căn chỉnh */
-    align-items: center;     /* Căn giữa dọc */
-    justify-content: center; /* Căn giữa ngang */
-    /* ------------------------ */
-
+    padding: 0 25px;
     height: 48px;
-    border-radius: 2px;
-    font-size: 14px;         /* Giảm font nhẹ nếu cần */
+    border-radius: 2px; 
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
-    gap: 5px;                /* Khoảng cách giữa icon và chữ */
+    display: flex;
+    align-items: center;
+    gap: 8px;
     transition: 0.2s;
-    
-    /* Đảm bảo nội dung không tràn ra ngoài khung bo tròn */
-    overflow: hidden;
 }
 
 .btn-naver-green.active {
     background-color: #333; /* Màu khi đã follow */
     color: #aaa;
-    width: auto;
 }
 
 .btn-naver-green .count {
@@ -380,4 +462,147 @@
     color: #444; /* Màu gạch nhạt */
     font-size: 11px;
     vertical-align: middle;
+}
+
+/* --- NÚT "ĐỌCMỚI NHẤT" VÀ "ĐỌC TỪ ĐẦU" --- */
+.btn-read-latest,
+.btn-read-first {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 0 20px;
+    height: 48px;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-read-latest:hover,
+.btn-read-first:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--primary-theme);
+}
+
+.btn-read-latest i,
+.btn-read-first i {
+    margin-right: 8px;
+}
+
+/* --- NÚT COPY LINK --- */
+.btn-copy-link {
+    background-color: transparent;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    padding: 0 20px;
+    height: 48px;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 0.2s;
+    position: relative;
+}
+
+.btn-copy-link:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--primary-theme);
+}
+
+.btn-copy-link i {
+    margin-right: 8px;
+}
+
+/* Copy Tooltip thông báo thành công */
+.copy-tooltip {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.copy-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+}
+
+.btn-copy-link.copied .copy-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- PHÂN TRANG CHAPTER --- */
+.chapter-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.chapter-pagination a,
+.chapter-pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-main);
+    text-decoration: none;
+    background-color: transparent;
+    transition: 0.2s;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.chapter-pagination a:hover {
+    background-color: var(--bg-hover);
+    border-color: var(--primary-theme);
+}
+
+.chapter-pagination .active {
+    background-color: var(--primary-theme);
+    color: #fff;
+    border-color: var(--primary-theme);
+    cursor: default;
+}
+
+.chapter-pagination .prev,
+.chapter-pagination .next {
+    min-width: auto;
+    padding: 0 12px;
+}
+
+.chapter-pagination .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }

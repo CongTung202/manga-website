@@ -11,7 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $host = 'localhost';
 $db   = 'mangawebsite';
 $user = 'root';
-$pass = ''; // Password của XAMPP thường là rỗng
+$pass = '123456'; // Password của XAMPP thường là rỗng
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
