@@ -4,42 +4,36 @@ require_once '../../../includes/functions.php';
 require_once '../../includes/header.php';
 require_once '../../includes/sidebar.php';
 
-$id = $_GET['id'] ?? null;
-if (!$id) { header("Location: index.php"); exit; }
-
-// Lấy thông tin cũ
-$stmt = $pdo->prepare("SELECT * FROM authors WHERE AuthorID = ?");
-$stmt->execute([$id]);
-$author = $stmt->fetch();
-if (!$author) { die("Tác giả không tồn tại"); }
-
 $error = '';
+$success = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = trim($_POST['name']);
     $description = trim($_POST['description']);
-    $avatarUrl = $author['Avatar']; // Mặc định giữ ảnh cũ
+    $avatarUrl = null;
 
     if (empty($name)) {
         $error = "Vui lòng nhập tên tác giả.";
     } else {
-        // Nếu có chọn ảnh mới -> Upload và lấy link mới
+        // Xử lý Upload ảnh (Nếu có chọn file)
         if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == 0) {
+            // Gọi hàm upload Cloudinary (đã có trong functions.php)
+            // Tham số thứ 2 là 'authors' -> Folder trên Cloudinary
             $uploaded = uploadImageToCloud($_FILES['avatar'], 'authors');
             if ($uploaded) {
                 $avatarUrl = $uploaded;
             } else {
-                $error = "Lỗi upload ảnh.";
+                $error = "Lỗi khi upload ảnh lên Cloud.";
             }
         }
 
         if (!$error) {
-            $stmtUpdate = $pdo->prepare("UPDATE authors SET Name=?, Description=?, Avatar=? WHERE AuthorID=?");
-            if ($stmtUpdate->execute([$name, $description, $avatarUrl, $id])) {
-                echo "<script>alert('Cập nhật thành công!'); window.location.href='index.php';</script>";
+            $stmt = $pdo->prepare("INSERT INTO authors (Name, Description, Avatar) VALUES (?, ?, ?)");
+            if ($stmt->execute([$name, $description, $avatarUrl])) {
+                echo "<script>alert('Thêm thành công!'); window.location.href='index.php';</script>";
                 exit;
             } else {
-                $error = "Lỗi hệ thống.";
+                $error = "Lỗi hệ thống, vui lòng thử lại.";
             }
         }
     }
@@ -48,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold m-0">Sửa Tác Giả</h3>
+        <h3 class="fw-bold m-0">Thêm Tác Giả</h3>
         <a href="index.php" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Quay lại</a>
     </div>
 
@@ -60,28 +54,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <form method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Tên tác giả <span class="text-danger">*</span></label>
-                <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($author['Name']) ?>" required>
+                <input type="text" name="name" class="form-control" required placeholder="Nhập tên tác giả">
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Ảnh đại diện</label>
-                <?php if (!empty($author['Avatar'])): ?>
-                    <div class="mb-2">
-                        <img src="<?= getImageUrl($author['Avatar']) ?>" class="rounded" width="80" height="80" style="object-fit: cover;">
-                        <span class="text-muted ms-2 small">Ảnh hiện tại</span>
-                    </div>
-                <?php endif; ?>
-                
                 <input type="file" name="avatar" class="form-control" accept="image/*">
-                <div class="form-text text-muted">Để trống nếu không muốn thay đổi ảnh.</div>
+                <div class="form-text text-muted">Hỗ trợ JPG, PNG, WEBP. Upload lên Cloudinary.</div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Mô tả / Tiểu sử</label>
-                <textarea name="description" class="form-control" rows="5"><?= htmlspecialchars($author['Description']) ?></textarea>
+                <textarea name="description" class="form-control" rows="5" placeholder="Thông tin về tác giả..."></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary px-4">Cập nhật</button>
+            <button type="submit" class="btn btn-success px-4">Lưu Tác Giả</button>
         </form>
     </div>
 </div>
