@@ -229,6 +229,10 @@
     color: #aaa;
 }
 
+.btn-naver-green i {
+    margin-right: 8px;
+}
+
 /* Nút Đọc từ đầu (Trắng/Xám nhạt) - Class btn-naver-white đã có hoặc cập nhật */
 .btn-naver-white {
     background-color: var(--bg-body);

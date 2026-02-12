@@ -236,7 +236,7 @@ button { cursor: pointer; border: none; background: none; color: var(--text-main
     .btn-toolbar { 
         padding: 5px 15px; /* Tăng vùng bấm cho ngón tay */
     }
-
+    
 /* 1. Thiết lập Flexbox và khoảng cách cho khung chứa */
     .toolbar-right {
         display: flex;
@@ -273,4 +273,10 @@ button { cursor: pointer; border: none; background: none; color: var(--text-main
         order: 5;
     }
 
+}
+
+@media screen and (max-width: 450px) {
+    .viewer-toolbar .btn-text {
+        display: none !important;
+    }
 }

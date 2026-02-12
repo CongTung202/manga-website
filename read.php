@@ -97,7 +97,7 @@ if (isset($_SESSION['user_id'])) {
 require_once 'includes/header.php';
 ?>
 
-<link rel="stylesheet" href="<?= BASE_URL ?>css/chapter.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>css/chapter.css?v=<?= time() ?>">
 
 
 <div class="viewer-toolbar">

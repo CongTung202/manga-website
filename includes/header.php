@@ -208,6 +208,32 @@ $current_page = basename($_SERVER['PHP_SELF']);
     color: var(--text-muted);
     font-size: 13px;
 }
+/* --- FIX RESPONSIVE CHO DROPDOWN MENU --- */
+        @media (max-width: 768px) {
+            /* Cho phép dropdown thoát khỏi vị trí tương đối của nút User */
+            .user-menu-container {
+                position: static; 
+            }
+
+            .user-dropdown-menu {
+                /* Căn chỉnh lại vị trí so với màn hình thay vì nút bấm */
+                right: 10px; /* Cách lề phải màn hình 10px */
+                left: auto;
+                
+                /* Tính toán vị trí từ trên xuống (tùy chỉnh số này cho khớp chiều cao Header của bạn) */
+                top: 60px; 
+                
+                /* Chiều rộng linh hoạt hơn trên mobile */
+                width: 250px; 
+                max-width: calc(100vw - 20px); /* Không bao giờ rộng hơn màn hình */
+            }
+            
+            /* Ẩn mũi tên tam giác (nếu có) vì giờ vị trí đã thay đổi, tránh bị lệch */
+            .user-dropdown-menu::before {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -232,7 +258,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </div>
             </div>
             
-            <div class="header__actions" style="display: flex; align-items: center; gap: 12px;">
+            <div class="header__actions" style="display: flex; align-items: center; gap: 12px;"> 
                 <!-- Theme Toggle Button -->
                 <button id="theme-toggle-btn" 
                         style="
