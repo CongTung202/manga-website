@@ -63,6 +63,12 @@
                    <i class="fas fa-tags"></i> Thể loại
                 </a>
             </li>
+            <li>
+                <a href="<?= ADMIN_MODULES_URL ?>authors/" 
+                   class="nav-link-admin <?= strpos($_SERVER['PHP_SELF'], 'modules/authors') !== false ? 'active' : '' ?>">
+                   <i class="fas fa-user"></i> Tác Giả
+                </a>
+            </li>
 
             <li class="menu-header">Người dùng & Tương tác</li>
 

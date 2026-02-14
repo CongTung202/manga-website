@@ -1,4 +1,5 @@
 <?php
+require_once '../../includes/init.php';
 require_once '../../../includes/db.php';
 require_once '../../../includes/functions.php'; // Quan trọng: Gọi functions để dùng getImageUrl
 require_once '../../includes/header.php';

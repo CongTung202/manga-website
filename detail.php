@@ -165,6 +165,7 @@ require_once 'includes/header.php';
                 </div>
             </div>
         </div>
+                <span class="count">Lượt xem: <?= number_format($article['ViewCount']) ?></span>
                 <div class="action-bar">
                     <button id="btn-follow-detail" class="btn-naver-green <?= $isBookmarked ? 'active' : '' ?>" data-id="<?= $article['ArticleID'] ?>">
                         <?php if ($isBookmarked): ?>
@@ -172,7 +173,6 @@ require_once 'includes/header.php';
                         <?php else: ?>
                             <i class="fas fa-plus"></i> <span>Quan tâm</span>
                         <?php endif; ?>
-                        <span class="count"><?= number_format($article['ViewCount']) ?></span>
                     </button>
 
                     <?php if ($firstChapID): ?>

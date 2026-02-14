@@ -83,3 +83,9 @@ RewriteRule ^author/([0-9]+)/?$ author-detail.php?id=$1 [L,QSA]
   ExpiresByType image/png "access 1 year"
   ExpiresByType image/webp "access 1 year"
 </IfModule>
+## ONEPANEL Force HTTPS by SSL installation
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
+Header always set Content-Security-Policy "upgrade-insecure-requests;"
+## ONEPANEL Force HTTPS by SSL installation end

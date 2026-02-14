@@ -13,6 +13,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="<?= BASE_URL ?>default/logo.png" type="image/png">
     <title><?= isset($pageTitle) ? $pageTitle : 'GTSCHUNDER' ?></title>
     
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
@@ -247,15 +248,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
             
            <div class="header__search">
-                <div class="search-box-wrapper">
-                    <input type="text" id="searchInput" placeholder="Tìm kiếm truyện/tác giả..." autocomplete="off">
-                    
-                    <button onclick="window.location.href='<?= BASE_URL ?>search?q='+document.getElementById('searchInput').value">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-
-                    <div id="searchSuggestions" class="search-suggestions"></div>
-                </div>
+                
             </div>
             
             <div class="header__actions" style="display: flex; align-items: center; gap: 12px;"> 
