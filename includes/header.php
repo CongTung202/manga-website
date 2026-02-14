@@ -247,15 +247,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
             
            <div class="header__search">
-                <div class="search-box-wrapper">
-                    <input type="text" id="searchInput" placeholder="Tìm kiếm truyện/tác giả..." autocomplete="off">
-                    
-                    <button onclick="window.location.href='<?= BASE_URL ?>search?q='+document.getElementById('searchInput').value">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-
-                    <div id="searchSuggestions" class="search-suggestions"></div>
-                </div>
+                
             </div>
             
             <div class="header__actions" style="display: flex; align-items: center; gap: 12px;"> 

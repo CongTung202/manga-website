@@ -9,9 +9,9 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // CẤU HÌNH CƠ SỞ DỮ LIỆU
 $host = 'localhost';
-$db   = 'mangawebsite';
-$user = 'root';
-$pass = ''; // Password của XAMPP thường là rỗng
+$db   = 'lagmfspohosting_mangawebsite';
+$user = 'lagmfspohosting_hunder';
+$pass = 'Hunder123@'; // Password của XAMPP thường là rỗng
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

@@ -6,9 +6,9 @@ use Cloudinary\Configuration\Configuration;
 // THAY THẾ CÁC THÔNG SỐ CỦA BẠN VÀO ĐÂY
 Configuration::instance([
     'cloud' => [
-        'cloud_name' => 'dhefmthim', 
-        'api_key'    => '466338912126235', 
-        'api_secret' => 'Qh6N6vFKhyZqlvTnXaOLUZBvIrA'],
+        'cloud_name' => 'dchcyeif2', 
+        'api_key'    => '147937347395549', 
+        'api_secret' => '8QUBA39tcM12jKXqfGN1-40WU60'],
     'url' => [
         'secure' => true // Luôn dùng HTTPS
     ]
