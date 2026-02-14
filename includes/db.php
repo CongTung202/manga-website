@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // CẤU HÌNH CƠ SỞ DỮ LIỆU
-$host = 'localhost';
+$host = 'onehost-webhn092302.000nethost.com';
 $db   = 'lagmfspohosting_mangawebsite';
 $user = 'lagmfspohosting_hunder';
 $pass = 'Hunder123@'; // Password của XAMPP thường là rỗng
