@@ -113,7 +113,6 @@ require_once 'includes/header.php';
 <link rel="stylesheet" href="<?= BASE_URL ?>css/detail.css?v=<?= time() ?>">
 
 <script>
-    // Lưu BASE_URL để dùng trong JavaScript
     const BASE_URL = '<?= BASE_URL ?>';
 </script>
 
@@ -146,8 +145,14 @@ require_once 'includes/header.php';
                     <span>Tác giả: </span> <span><?= $article['Authors'] ?? 'Tác giả đang cập nhật' ?></span>
                 </div>
 
-                <div class="story-desc">
-                    <?= nl2br(htmlspecialchars($article['Description'])) ?>
+                <div class="story-desc-wrapper">
+                    <div id="desc-content" class="story-desc">
+                        <?= nl2br(htmlspecialchars($article['Description'])) ?>
+                    </div>
+                    
+                    <button id="btn-toggle-desc" class="btn-toggle-desc" style="display: none;">
+                        <span>Xem thêm</span> <i class="fas fa-chevron-down"></i>
+                    </button>
                 </div>
 
                 <div class="meta-tags">

@@ -151,13 +151,59 @@
     margin-bottom: 15px;
 }
 
+/* Container giữ vị trí */
+.story-desc-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Style chung cho văn bản */
 .story-desc {
     font-size: 14px;
     color: var(--text-main);
     line-height: 1.6;
-    margin-bottom: 15px;
-    max-height: 80px; /* Giới hạn chiều cao mô tả */
-    overflow: hidden; /* Ẩn bớt nếu quá dài */
+    overflow: hidden; /* Bắt buộc để ẩn phần thừa */
+    transition: all 0.3s ease;
+}
+
+/* --- TRẠNG THÁI THU GỌN (QUAN TRỌNG) --- */
+.story-desc.clamped {
+    /* Hiển thị tối đa 3 dòng */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    max-height: 4.8em; /* Phòng hờ trình duyệt cũ (1.6 line-height * 3 dòng) */
+}
+
+/* --- TRẠNG THÁI MỞ RỘNG --- */
+.story-desc.expanded {
+    display: block; /* Trả về hiển thị bình thường */
+    max-height: none !important;
+    -webkit-line-clamp: unset !important;
+}
+
+/* Nút bấm */
+.btn-toggle-desc {
+    background: transparent;
+    border: none;
+    color: var(--primary-theme); /* Hoặc #28a745 nếu muốn màu xanh */
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 0;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-toggle-desc:hover {
+    text-decoration: underline;
+}
+
+.btn-toggle-desc:hover {
+    text-decoration: underline;
 }
 
 .meta-tags {

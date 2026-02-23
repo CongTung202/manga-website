@@ -13,13 +13,13 @@ $host = $_SERVER['HTTP_HOST'];
 
 // Nếu web nằm trong thư mục con (VD: localhost/manga-website), sửa dòng dưới
 // Nếu web nằm ngay thư mục gốc (Hosting thật), để trống ''
-$folder = '';
+$folder = '/manga-website';
 
 // ========================================
 // 2. ĐỊNH NGHĨA CÁC HẰNG SỐ URL TOÀN CỤC
 // ========================================
 if (!defined('BASE_URL')) {
-    define('BASE_URL', 'https://gtschunder.id.vn/');
+    define('BASE_URL', $protocol . $host . $folder . '/');
 }
 
 if (!defined('ADMIN_URL')) {
