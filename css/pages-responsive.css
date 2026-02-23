@@ -632,3 +632,77 @@
         z-index: 999;
     }
 }
+/* ==================== TAB NAVIGATION RESPONSIVE (Scroll Ngang) ==================== */
+
+/* Áp dụng cho màn hình Tablet và Mobile (dưới 991px) */
+@media (max-width: 991px) {
+    
+    /* 1. Cấu hình khung chứa (Container) */
+    .type-nav, 
+    .genre-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important; /* Bắt buộc không xuống dòng */
+        overflow-x: auto !important;  /* Cho phép cuộn ngang */
+        justify-content: flex-start !important; /* Căn trái để bắt đầu cuộn */
+        gap: 20px; /* Khoảng cách giữa các tab */
+        padding-bottom: 10px; /* Khoảng hở dưới để không bị dính thanh cuộn */
+        margin-bottom: 20px;
+        
+        /* Vuốt mượt hơn trên iOS */
+        -webkit-overflow-scrolling: touch; 
+        
+        /* Ẩn thanh cuộn (Scrollbar) cho đẹp */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    /* Ẩn thanh cuộn trên Chrome/Safari */
+    .type-nav::-webkit-scrollbar, 
+    .genre-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* 2. Cấu hình từng mục (Item) */
+    .nav-type-item, 
+    .btn-genre {
+        white-space: nowrap; /* Chữ luôn nằm trên 1 dòng */
+        flex-shrink: 0; /* Không bị co lại nếu hết chỗ */
+        font-size: 13px; /* Kích thước chữ vừa phải */
+        padding: 10px 5px; /* Padding gọn hơn */
+    }
+
+    /* --- Riêng cho trang Types (Giống hình mẫu) --- */
+    .nav-type-item {
+        border-bottom-width: 3px; /* Viền dưới dày hơn chút để dễ nhìn */
+        margin-bottom: 0;
+        text-transform: uppercase;
+    }
+    
+    .nav-type-item.active {
+        color: var(--primary-theme);
+        border-bottom-color: var(--primary-theme);
+    }
+
+    /* --- Riêng cho trang Genres (Biến nút thành dạng chữ hoặc giữ nút) --- */
+    /* Nếu bạn muốn Genres cũng giống hệt hình mẫu (chỉ có chữ và gạch dưới) thì dùng đoạn dưới. 
+       Nếu muốn giữ nguyên nút tròn thì bỏ qua đoạn này. */
+    .genre-nav {
+        border-bottom: 1px solid var(--border-color); /* Thêm gạch chân toàn dải */
+        gap: 25px;
+    }
+    
+    .btn-genre {
+        background: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        border-bottom: 3px solid transparent !important;
+        padding: 10px 0 !important;
+        color: var(--text-muted) !important;
+        font-weight: bold;
+    }
+    
+    .btn-genre.active {
+        color: var(--primary-theme) !important;
+        border-bottom-color: var(--primary-theme) !important;
+    }
+}

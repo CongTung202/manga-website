@@ -22,6 +22,9 @@ RewriteRule ^includes/load_chapters\.php$ - [L]
 # Cho phép AJAX đến includes/get_chapter_id.php (lấy chapter ID)
 RewriteRule ^includes/get_chapter_id\.php$ - [L]
 
+# [THÊM MỚI] Cho phép AJAX báo lỗi
+RewriteRule ^includes/action_report\.php$ - [L]
+
 # Chặn truy cập vào thư mục includes (chứa các file cấu hình)
 RewriteRule ^includes/ - [F,L]
 

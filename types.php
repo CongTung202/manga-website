@@ -91,7 +91,7 @@ require_once 'includes/header.php';
 <style>
     /* CSS Tab Navigation */
     .type-nav { 
-        display: flex; justify-content: center; gap: 20px; 
+        display: flex; gap: 20px; 
         margin-bottom: 40px; border-bottom: 2px solid var(--border-color); 
     }
     .nav-type-item {
