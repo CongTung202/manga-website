@@ -92,3 +92,17 @@ RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301,NE]
 Header always set Content-Security-Policy "upgrade-insecure-requests;"
 ## ONEPANEL Force HTTPS by SSL installation end
+
+<IfModule lsapi_module>
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_value upload_max_filesize 100M
+    php_value post_max_size 100M
+</IfModule>
+
+<IfModule mod_php7.c>
+    php_value max_execution_time 300
+    php_value max_input_time 300
+    php_value upload_max_filesize 100M
+    php_value post_max_size 100M
+</IfModule>

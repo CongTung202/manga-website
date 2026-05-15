@@ -85,12 +85,19 @@
                     <i class="fas fa-comments"></i> Bình luận
                 </a>
             </li>
+            <li>
+                <a href="<?= ADMIN_MODULES_URL ?>reports/index.php"
+                class="nav-link-admin <?= strpos($_SERVER['PHP_SELF'], 'modules/reports') !== false ? 'active' : '' ?>">
+                    <i class="fas fa-bug"></i> Quản lý Báo lỗi
+                </a>
+            </li>
 
             <li class="mt-4 border-top pt-3" style="border-color: var(--border-color)!important;">
                 <a href="<?= BASE_URL ?>" target="_blank" class="nav-link-admin">
                     <i class="fas fa-external-link-alt"></i> Xem trang chủ
                 </a>
             </li>
+            
             <li>
                 <a href="<?= BASE_URL ?>logout" class="nav-link-admin" style="color: #ff6b6b;" onclick="return confirm('Đăng xuất?')">
                     <i class="fas fa-sign-out-alt"></i> Đăng xuất

@@ -17,27 +17,27 @@ function getRelativeTime($datetime) {
     else return floor($diff / 2592000) . ' tháng trước';
 } 
 
-// 1. Lấy truyện mới cập nhật (kèm chapter gần nhất)
+// 1. Lấy truyện mới cập nhật (Ẩn CategoryID = 4)
 $stmtNew = $pdo->query("
     SELECT a.*, 
            (SELECT c.`Index` FROM chapters c WHERE c.ArticleID = a.ArticleID AND c.IsDeleted = 0 ORDER BY c.CreatedAt DESC LIMIT 1) as LatestChapterIndex,
            (SELECT c.Title FROM chapters c WHERE c.ArticleID = a.ArticleID AND c.IsDeleted = 0 ORDER BY c.CreatedAt DESC LIMIT 1) as LatestChapterTitle,
            (SELECT c.CreatedAt FROM chapters c WHERE c.ArticleID = a.ArticleID AND c.IsDeleted = 0 ORDER BY c.CreatedAt DESC LIMIT 1) as LatestChapterDate
     FROM articles a 
-    WHERE a.IsDeleted = 0 
+    WHERE a.IsDeleted = 0 AND (a.CategoryID != 4 OR a.CategoryID IS NULL)
     ORDER BY a.UpdatedAt DESC 
     LIMIT 10
 ");
 $articlesNew = $stmtNew->fetchAll();
 
-// 2. Lấy truyện nhiều lượt xem (Top 5)
+// 2. Lấy truyện nhiều lượt xem - Top 5 (Ẩn CategoryID = 4)
 $stmtTop = $pdo->query("
     SELECT a.*, 
            (SELECT c.`Index` FROM chapters c WHERE c.ArticleID = a.ArticleID AND c.IsDeleted = 0 ORDER BY c.CreatedAt DESC LIMIT 1) as LatestChapterIndex,
            (SELECT c.Title FROM chapters c WHERE c.ArticleID = a.ArticleID AND c.IsDeleted = 0 ORDER BY c.CreatedAt DESC LIMIT 1) as LatestChapterTitle,
            (SELECT c.CreatedAt FROM chapters c WHERE c.ArticleID = a.ArticleID AND c.IsDeleted = 0 ORDER BY c.CreatedAt DESC LIMIT 1) as LatestChapterDate
     FROM articles a 
-    WHERE a.IsDeleted = 0 
+    WHERE a.IsDeleted = 0 AND (a.CategoryID != 4 OR a.CategoryID IS NULL)
     GROUP BY a.ArticleID
     ORDER BY a.ViewCount DESC 
     LIMIT 5
@@ -50,7 +50,7 @@ $articlesTop = $stmtTop->fetchAll();
     <section class="section">
         <div class="section__header">
             <h3>Truyện mới đăng</h3>
-            <a href="#" class="section__view-all">Xem tất cả ></a>
+            <a href="<?= BASE_URL ?>/types" class="section__view-all">Xem tất cả ></a>
         </div>
 
         <div class="card-list">
@@ -87,7 +87,7 @@ $articlesTop = $stmtTop->fetchAll();
     <section class="section">
         <div class="section__header">
             <h3>Truyện nhiều lượt xem nhất</h3>
-            <a href="#" class="section__view-all">Xem tất cả ></a>
+            <a href="<?= BASE_URL ?>/genres" class="section__view-all">Xem tất cả ></a>
         </div>
 
         <div class="card-list">
